@@ -1,0 +1,72 @@
+version: "3.8"
+services:
+  web:
+    build:
+      context: ./app
+      target: development
+    restart: always
+    networks:
+      registroconstructores-network:
+        aliases:
+          - app
+    env_file:
+      - ./app/.env.local
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+    
+  nginx: 
+    build: ./nginx
+    ports:
+      - 8080:80
+    networks:
+      registroconstructores-network:
+        aliases:
+          - nginx
+    depends_on:
+      - web
+  mongo:
+    image: mongo:4.2.5
+    networks:
+      registroconstructores-network:
+        aliases:
+          - mongo
+    restart: always
+    volumes:
+      - datadb:/data/db
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+    ports:
+      - 27017:27017
+  ipfs:
+    image: ipfs/go-ipfs:latest
+    environment:
+      - IPFS_PROFILE=server
+      - IPFS_PATH=/ipfsdata
+    networks:
+      registroconstructores-network:
+        aliases:
+          - ipfs
+    volumes:
+      - ./data/ipfs:/ipfsdata
+      - ./.ipfs_config:/root/.ipfs/config
+        #ports:
+        #- "4001:4001"
+        #- "127.0.0.1:8080:7080"
+        #- "127.0.0.1:8081:7081"
+        #- "127.0.0.1:5001:5001"
+
+volumes:
+  datadb:
+
+networks:
+  registroconstructores-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
