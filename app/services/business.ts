@@ -4,7 +4,7 @@ import * as jwt from "jsonwebtoken"
 import _ from 'lodash'
 import moment from 'moment'
 import { customAlphabet, nanoid } from 'nanoid'
-import { CalculadoraCapacidad } from 'rnc-main-lib'
+import { CalculadoraCapacidad } from '../rnclib/lib/index'
 
 
 
@@ -60,7 +60,7 @@ export const getTramiteByCUIT = (cuit: string): Promise<TramiteAlta> => {
 
 export const getTramiteByID = (_id: string): Promise<TramiteAlta> => {
   return axios.get(`/api/tramite/findById?_id=${_id}`, {
-   
+
     headers: {
       Authorization: 'Bearer ' + getToken()
     }
@@ -71,10 +71,10 @@ export const getTramiteByID = (_id: string): Promise<TramiteAlta> => {
   })
 }
 
-export const getCertificados = (cuit: string , token: string = null): Promise<any> => {
+export const getCertificados = (cuit: string, token: string = null): Promise<any> => {
   return axios.get(`/api/certificado?cuit=${cuit}`, {
     headers: {
-      Authorization: 'Bearer ' + token || getToken() 
+      Authorization: 'Bearer ' + token || getToken()
     }
   }).then((t) => {
     return t.data.certificados
@@ -157,7 +157,7 @@ export const getEmptyTramiteAlta = (): TramiteAlta => {
     esCasadoTitular: false,
     nombreConyuge: '',
     apellidoConyuge: '',
-    archivoDocConyuge:[],
+    archivoDocConyuge: [],
     tipoDocumentoConyuge: '',
     documentoConyugue: '',
     status: 'BORRADOR',
@@ -179,7 +179,7 @@ export const getEmptyTramiteAlta = (): TramiteAlta => {
       datos: ''
     },
     autoridadesSociedad: [],
-    autoridadesFechaVencimiento:'',
+    autoridadesFechaVencimiento: '',
     inversionesPermanentes: [],
     autoridadesVencimiento: false,
     sistemaCalidad: [],
@@ -409,7 +409,7 @@ export const isPersonaExtranjera = (tramite: TramiteAlta): boolean => {
 }
 
 export const isTramiteEditable = (tramite: TramiteAlta): boolean => {
-  return (tramite && tramite.status === 'BORRADOR')  ||(tramite && tramite.status === 'OBSERVADO') || (tramite && !tramite.cuit) || (!tramite)
+  return (tramite && tramite.status === 'BORRADOR') || (tramite && tramite.status === 'OBSERVADO') || (tramite && !tramite.cuit) || (!tramite)
 }
 
 
@@ -436,10 +436,10 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
     tramite.status = "PENDIENTE DE REVISION"
     return saveTramiteService(tramite)
   }
-  
-  
 
-
+  /*** 
+   * Verifica que se genere el certificado. Debo justificar mas claro este metodo.
+  */
   if (getUsuario().isAprobador()) {
     if (getReviewAbierta(tramite)) {
       tramite.status = 'OBSERVADO'
@@ -449,87 +449,81 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
       const certificado = await aprobarTramite(tramite)
       return certificado.tramite
     }
-
   }
-
-  
-  
-  
-  
 
 
   if (tramite.status === 'PENDIENTE DE REVISION' && getUsuario().isBackOffice()) {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else{
+    } else {
       tramite.status = 'A SUPERVISAR'
-    tramite.asignadoA = null
-   
+      tramite.asignadoA = null
+
     }
     return saveTramiteService(tramite)
-    
+
   }
 
   if (tramite.status === 'EN REVISION' && getUsuario().isBackOffice()) {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-     } else{
-    tramite.status = 'A SUPERVISAR'
-    tramite.asignadoA = null
-   }
-    
+    } else {
+      tramite.status = 'A SUPERVISAR'
+      tramite.asignadoA = null
+    }
+
     return saveTramiteService(tramite)
   }
- 
+
 
   if (tramite.status === 'OBSERVADO' && getUsuario().isConstructor()) {
     tramite.status = 'SUBSANADO'
     tramite.cantidadSubsanado = tramite && tramite.cantidadSubsanado ? tramite.cantidadSubsanado + 1 : 1
-    tramite.asignadoA = tramite.supervision && tramite.supervision.supervisadoPor ? tramite.supervision.supervisadoPor :  tramite.userBackoffice && tramite.userBackoffice.userPor
-   return saveTramiteService(tramite)
+    tramite.asignadoA = tramite.supervision && tramite.supervision.supervisadoPor ? tramite.supervision.supervisadoPor : tramite.userBackoffice && tramite.userBackoffice.userPor
+    return saveTramiteService(tramite)
   }
 
   if ((tramite.status === 'SUBSANADO') && (getUsuario().isBackOffice())) {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else{
+    } else {
       tramite.status = 'SUBSANADO A SUPERVISAR'
-    tramite.asignadoA = null
-   
+      tramite.asignadoA = null
+
     }
     return saveTramiteService(tramite)
-    
-    
+
+
   }
 
 
   if ((tramite.status === 'SUBSANADO EN REVISION') && (getUsuario().isBackOffice())) {
-    tramite.status = 'SUBSANADO A SUPERVISAR' 
+    tramite.status = 'SUBSANADO A SUPERVISAR'
     tramite.asignadoA = null
     return saveTramiteService(tramite)
   }
-  
 
-  if (tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isSupervisor() || tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isAprobador() ) {
+
+  if (tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isSupervisor() || tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isAprobador()) {
     if (getReviewAbierta(tramite) && getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-   
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+
       tramite.supervision = {
         supervisadoPor: getUsuario().userData(),
         supervisadoAt: new Date().getTime()
@@ -547,11 +541,11 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
   }
 
 
-  if (tramite.status === 'SUBSANADO EN REVISION' && getUsuario().isSupervisor()  ) {
+  if (tramite.status === 'SUBSANADO EN REVISION' && getUsuario().isSupervisor()) {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-   
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
@@ -567,14 +561,14 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
     }
     return saveTramiteService(tramite)
   }
- 
 
-  
+
+
   if (tramite.status === 'A SUPERVISAR' && getUsuario().isSupervisor()) {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-   
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+
       tramite.supervision = {
         supervisadoPor: getUsuario().userData(),
         supervisadoAt: new Date().getTime()
@@ -594,8 +588,8 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
   if (tramite.status === 'PENDIENTE DE APROBACION') {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-   
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+
       tramite.asignadoA = null
     } else {
       tramite.categoria = 'INSCRIPTO'
@@ -606,12 +600,12 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
   }
 
 
-  
-  if (tramite.status === 'EN REVISION' ) {
+
+  if (tramite.status === 'EN REVISION') {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado =  tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-   
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
@@ -623,9 +617,9 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
     }
     return saveTramiteService(tramite)
   }
- 
- 
-  
+
+
+
 
 
 }
@@ -639,15 +633,15 @@ export const allowGuardar = (tramite: TramiteAlta) => {
   if (['BORRADOR', 'OBSERVADO'].includes(tramite.status) && getUsuario().isConstructor())
     return true
 
-  if (getUsuario().isControlador() && [ 'PENDIENTE DE REVISION','EN REVISION', 'SUBSANADO','SUBSANADO A SUPERVISAR','SUBSANADO EN REVISON'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
-    return true
-  
-    if (getUsuario().isBackOffice() && ['PENDIENTE DE REVISION', 'EN REVISION', 'SUBSANADO', 'A SUPERVISAR', 'SUBSANADO A SUPERVISAR','SUBSANADO EN REVISION'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
-    return true
-  if (getUsuario().isSupervisor() && ['PENDIENTE DE REVISION', 'EN REVISION', 'SUBSANADO', 'A SUPERVISAR', 'SUBSANADO A SUPERVISAR','SUBSANADO EN REVISON'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
+  if (getUsuario().isControlador() && ['PENDIENTE DE REVISION', 'EN REVISION', 'SUBSANADO', 'SUBSANADO A SUPERVISAR', 'SUBSANADO EN REVISON'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
     return true
 
-  if (getUsuario().isAprobador() && ['PENDIENTE DE REVISION','EN REVISION', 'SUBSANADO', 'A SUPERVISAR', 'A APROBAR', 'SUBSANADO A SUPERVISAR','SUBSANADO EN REVISON'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
+  if (getUsuario().isBackOffice() && ['PENDIENTE DE REVISION', 'EN REVISION', 'SUBSANADO', 'A SUPERVISAR', 'SUBSANADO A SUPERVISAR', 'SUBSANADO EN REVISION'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
+    return true
+  if (getUsuario().isSupervisor() && ['PENDIENTE DE REVISION', 'EN REVISION', 'SUBSANADO', 'A SUPERVISAR', 'SUBSANADO A SUPERVISAR', 'SUBSANADO EN REVISON'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
+    return true
+
+  if (getUsuario().isAprobador() && ['PENDIENTE DE REVISION', 'EN REVISION', 'SUBSANADO', 'A SUPERVISAR', 'A APROBAR', 'SUBSANADO A SUPERVISAR', 'SUBSANADO EN REVISON'].includes(tramite.status) && (tramite.asignadoA && tramite.asignadoA.cuit === getUsuario().userData().cuit))
     return true
 
 
@@ -666,10 +660,21 @@ export const getUniqCode = () => {
   return nanoid().toUpperCase()
 }
 
+/**
+ * 
+ * @param tramite 
+ * @param usuario 
+ * @param db 
+ * @returns  CertificadoCapacidad
+ */
 export const generarCertificado = async (tramite: TramiteAlta, usuario: Usuario, db): Promise<CertificadoCapacidad> => {
 
+  // Aquí se invoca a -> rnc-main-lib
   const calculadora = new CalculadoraCapacidad(tramite)
+
+  // Este método es importante puesto que es el que lee el archivo índices.csv
   await calculadora.init()
+
   const capacidadEjecucion = calculadora
     .getMontoCertificacionesPorPeriodo()
     .aplicarIndiceCorreccion()
@@ -685,7 +690,6 @@ export const generarCertificado = async (tramite: TramiteAlta, usuario: Usuario,
         return calculadora.getCompromiso(obra)
       })
       .reduce((acc, val) => acc += val, 0)
-
 
 
   const certificado: CertificadoCapacidad = {
@@ -711,10 +715,10 @@ export const generarCertificado = async (tramite: TramiteAlta, usuario: Usuario,
 
 
 export const cambiarADesActualizado = async (tramite: TramiteAlta): Promise<TramiteAlta> => {
-  
+
   delete tramite["_id"]
   tramite.categoria = 'DESACTUALIZADO'
-  tramite.subCategoria ='ACTUALIZACION'
+  tramite.subCategoria = 'ACTUALIZACION'
   tramite.status = 'BORRADOR'
   //await saveTramiteService(tramite)
   return tramite = await saveTramiteService(tramite)
@@ -725,12 +729,12 @@ export const cambiarADesActualizado = async (tramite: TramiteAlta): Promise<Tram
 export const calcularSaldoObra = (obra: DDJJObra) => {
 
   const sumaRedeterminaciones = obra.redeterminaciones && obra.redeterminaciones.length !== 0 || obra.redeterminaciones && obra.redeterminaciones.length === 0 ? obra.redeterminaciones.map(r => parseInt(r.monto.toFixed(2), 10)).reduce((acc, val) => acc += val, 0) : 0
-  const sumaAmpliaciones = obra.ampliaciones && obra.ampliaciones.length !==  0 || obra.ampliaciones && obra.ampliaciones.length ===  0 ? obra.ampliaciones.map(a => parseInt(a.monto.toFixed(2), 10)).reduce((acc, val) => acc += val, 0) : 0
+  const sumaAmpliaciones = obra.ampliaciones && obra.ampliaciones.length !== 0 || obra.ampliaciones && obra.ampliaciones.length === 0 ? obra.ampliaciones.map(a => parseInt(a.monto.toFixed(2), 10)).reduce((acc, val) => acc += val, 0) : 0
   const sumaCertifcaciones = obra.certificaciones && obra.certificaciones.length !== 0 || obra.certificaciones && obra.certificaciones.length === 0 ? obra.certificaciones.map(c => c.monto).reduce((acc, val) => acc += val, 0) : 0
 
-  const saldo = (obra.montoInicial + sumaRedeterminaciones + sumaAmpliaciones) - sumaCertifcaciones 
+  const saldo = (obra.montoInicial + sumaRedeterminaciones + sumaAmpliaciones) - sumaCertifcaciones
 
-  return saldo 
+  return saldo
 }
 
 export const calcularCertificaciones = (obra: DDJJObra) => {
@@ -743,43 +747,43 @@ export const calcularCertificaciones = (obra: DDJJObra) => {
 
 }
 
-export const getVigenciaCertificado = (tramite:TramiteAlta) => {
+export const getVigenciaCertificado = (tramite: TramiteAlta) => {
   const ultimoEjercicioIdx = _.last(tramite.ejercicios.map(e => moment(e.fechaCierre, 'DD/MM/YYYY').toDate().getTime()).sort())
-  const ultimoEjercicio : Ejercicio = tramite.ejercicios.filter(e => moment(e.fechaCierre, 'DD/MM/YYYY').toDate().getTime() === ultimoEjercicioIdx)[0]
-  return moment(ultimoEjercicio.fechaCierre, 'DD/MM/YYYY').add(18,'months').format('DD/MM/YYYY')
+  const ultimoEjercicio: Ejercicio = tramite.ejercicios.filter(e => moment(e.fechaCierre, 'DD/MM/YYYY').toDate().getTime() === ultimoEjercicioIdx)[0]
+  return moment(ultimoEjercicio.fechaCierre, 'DD/MM/YYYY').add(18, 'months').format('DD/MM/YYYY')
 }
 
-export const hasObservacionesObra =(obra:DDJJObra)=>{
- return obra.observacionesDelRegistro && obra.observacionesDelRegistro.denominacion
-      || obra.observacionesDelRegistro &&  obra.observacionesDelRegistro.ubicacionGeografica
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.plazoPorContrato
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.transcurrido
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.restante
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.razonSocialUTE
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.cuitUTE
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.participacionUTE
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.razonSocialComitente
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.cuitComitente
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.montoInicial
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.especialidad1
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidad1
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidades1Otros
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.especialidad2
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidad2
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidades2Otros
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.especialidad3
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidad3
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.subespecialidades
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidades3Otros
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.datosGenerales
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.archivosOrdenDeCompra
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.addProrroga
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.certificacionesTitles
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.ampliacionesTitle
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.redeterminacionesTitle
-			|| obra.observacionesDelRegistro && obra.observacionesDelRegistro.likeProrroga
-      || obra.observacionesDelRegistro && obra.observacionesDelRegistro.ubicacion
-      || obra.observacionesDelRegistro && obra.observacionesDelRegistro.ubicacionText
+export const hasObservacionesObra = (obra: DDJJObra) => {
+  return obra.observacionesDelRegistro && obra.observacionesDelRegistro.denominacion
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.ubicacionGeografica
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.plazoPorContrato
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.transcurrido
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.restante
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.razonSocialUTE
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.cuitUTE
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.participacionUTE
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.razonSocialComitente
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.cuitComitente
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.montoInicial
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.especialidad1
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidad1
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidades1Otros
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.especialidad2
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidad2
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidades2Otros
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.especialidad3
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidad3
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.subespecialidades
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.subEspecialidades3Otros
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.datosGenerales
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.archivosOrdenDeCompra
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.addProrroga
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.certificacionesTitles
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.ampliacionesTitle
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.redeterminacionesTitle
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.likeProrroga
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.ubicacion
+    || obra.observacionesDelRegistro && obra.observacionesDelRegistro.ubicacionText
 }
 
 /**
@@ -787,30 +791,30 @@ export const hasObservacionesObra =(obra:DDJJObra)=>{
  * @param obra Obra sobre la cual se quiere hacer el analisis
  * @returns Devuele el estado calculado de la obra
  */
-export const determinarEstadoObra = (obra:DDJJObra) : 'APROBADA' | 'OBSERVADA' |'SUPERVIZADA' |'A REVISAR' | 'RECHAZADA' | 'DESESTIMADA' | 'REVISADA' | null | '' =>{
-  if (obra.status==='APROBADA' )
-    return  !_.isEmpty(obra.certificaciones && obra.certificaciones.filter(c => c.status === 'OBSERVADA')) 
-    || !_.isEmpty(obra.ampliaciones && obra.ampliaciones.filter(c => c.status === 'OBSERVADA')) 
-    || !_.isEmpty(obra.redeterminaciones && obra.redeterminaciones.filter(c => c.status === 'OBSERVADA'))
-    || hasObservacionesObra(obra) ? 'OBSERVADA' : 'APROBADA'
-  
-  if (obra.status ===null )
-    return  !_.isEmpty(obra.certificaciones && obra.certificaciones.filter(c => c.status === 'OBSERVADA')) 
-    || !_.isEmpty(obra.ampliaciones && obra.ampliaciones.filter(c => c.status === 'OBSERVADA')) 
-    || !_.isEmpty(obra.redeterminaciones && obra.redeterminaciones.filter(c => c.status === 'OBSERVADA'))
-    || hasObservacionesObra(obra) ? 'OBSERVADA' : 'A REVISAR'
-    || obra.status === null ? 'A REVISAR' : '' 
-   
-  if (!obra.status )
-    return  !_.isEmpty(obra.certificaciones && obra.certificaciones.filter(c => c.status === 'OBSERVADA')) 
-    || !_.isEmpty(obra.ampliaciones && obra.ampliaciones.filter(c => c.status === 'OBSERVADA')) 
-    || !_.isEmpty(obra.redeterminaciones && obra.redeterminaciones.filter(c => c.status === 'OBSERVADA'))
-    || hasObservacionesObra(obra) ? 'OBSERVADA' : 'A REVISAR'
-    || obra.status === null ? 'A REVISAR' : '' 
-   
-    return obra.status
+export const determinarEstadoObra = (obra: DDJJObra): 'APROBADA' | 'OBSERVADA' | 'SUPERVIZADA' | 'A REVISAR' | 'RECHAZADA' | 'DESESTIMADA' | 'REVISADA' | null | '' => {
+  if (obra.status === 'APROBADA')
+    return !_.isEmpty(obra.certificaciones && obra.certificaciones.filter(c => c.status === 'OBSERVADA'))
+      || !_.isEmpty(obra.ampliaciones && obra.ampliaciones.filter(c => c.status === 'OBSERVADA'))
+      || !_.isEmpty(obra.redeterminaciones && obra.redeterminaciones.filter(c => c.status === 'OBSERVADA'))
+      || hasObservacionesObra(obra) ? 'OBSERVADA' : 'APROBADA'
 
-  
+  if (obra.status === null)
+    return !_.isEmpty(obra.certificaciones && obra.certificaciones.filter(c => c.status === 'OBSERVADA'))
+      || !_.isEmpty(obra.ampliaciones && obra.ampliaciones.filter(c => c.status === 'OBSERVADA'))
+      || !_.isEmpty(obra.redeterminaciones && obra.redeterminaciones.filter(c => c.status === 'OBSERVADA'))
+      || hasObservacionesObra(obra) ? 'OBSERVADA' : 'A REVISAR'
+        || obra.status === null ? 'A REVISAR' : ''
+
+  if (!obra.status)
+    return !_.isEmpty(obra.certificaciones && obra.certificaciones.filter(c => c.status === 'OBSERVADA'))
+      || !_.isEmpty(obra.ampliaciones && obra.ampliaciones.filter(c => c.status === 'OBSERVADA'))
+      || !_.isEmpty(obra.redeterminaciones && obra.redeterminaciones.filter(c => c.status === 'OBSERVADA'))
+      || hasObservacionesObra(obra) ? 'OBSERVADA' : 'A REVISAR'
+        || obra.status === null ? 'A REVISAR' : ''
+
+  return obra.status
+
+
 }
 
 //export const isActualizacion =  (tramite:TramiteAlta) : boolean => {

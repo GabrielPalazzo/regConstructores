@@ -111,6 +111,7 @@ export default (props) => {
   const [aceptaTerminosYCondiciones, setAceptTerminosYCondiciones] = useState(false)
 
   const [apoderadosSeleccionado, setApoderadosSeleccionado] = useState(null)
+  const [observacionRegistro, setObservacionRegistro]= useState('')
   const [motivoRechazo, setMotivoRechazo] = useState('')
   const [showMotivoRechazo, setShowMotivoRechazo] = useState(false)
   
@@ -212,7 +213,8 @@ export default (props) => {
       fotosDNI: fotosDNIApoderado,
       actaAutoridades: actaAutoridadesApoderado,
       actaAdminLegitimado: actaAdminLegitimado,
-      codigo:getCodigoObra()
+      codigo:getCodigoObra(),
+      observacionRegistro,
     })
     await save()
     setVisible(false)
@@ -230,6 +232,7 @@ export default (props) => {
     setEmailApoderado('')
     setEsAdministradorLegitimado(false)
     setTipoApoderado('')
+    setObservacionRegistro('')
   }
 
   const handleCancel = e => {
@@ -272,6 +275,8 @@ export default (props) => {
     setCuitApoderado(r.cuit)
     setActaAdminLegitimado(r.actaAdminLegitimado)
     setEsAdministradorLegitimado(r.esAdministrador)
+    setObservacionRegistro(r.observacionRegistro)
+    
   }
 
 

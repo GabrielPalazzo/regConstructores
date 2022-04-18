@@ -9,6 +9,8 @@ services:
       registroconstructores-network:
         aliases:
           - app
+    volumes:
+      - /var/rncdata:/app/rnclib/data
     env_file:
       - ./app/.env.local
     logging:

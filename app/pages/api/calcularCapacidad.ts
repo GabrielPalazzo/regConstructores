@@ -1,4 +1,4 @@
-import { CalculadoraCapacidad } from 'rnc-main-lib'
+import { CalculadoraCapacidad } from '../../rnclib/lib/index' //'rnc-main-lib'
 import _ from 'lodash'
 
 export default async (req, res) => {

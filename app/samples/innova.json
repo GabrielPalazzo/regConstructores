@@ -1,0 +1,160 @@
+{
+    "_id" : "x2TUUCY3mx-vbksBE9fmV",
+    "rechazos" : [],
+    "apoderados" : [],
+    "creatorId" : {
+        "iat" : 1617624679,
+        "cuit" : "27049902072",
+        "GivenName" : "NILDA",
+        "Surname" : "ENMA",
+        "email" : "",
+        "sub" : "35420b79-aa9f-4f75-a3f5-543e9a6a5515",
+        "Role" : [ 
+            "CONSTRUCTOR"
+        ]
+    },
+    "inscripcionAFIPConstancia" : [],
+    "certificadoFiscal" : null,
+    "cuit" : "27049902072",
+    "telefono" : "49444444",
+    "telefonoAlternativo" : "",
+    "email" : "",
+    "id" : "",
+    "ieric" : "",
+    "nroLegajo" : "",
+    "personeria" : "SA",
+    "propietario" : null,
+    "propietarios" : [],
+    "emailInstitucional" : "innova@innova.com",
+    "razonSocial" : "INNOVA S.A.",
+    "nombreTitular" : "",
+    "apellidoTitular" : "",
+    "esCasadoTitular" : false,
+    "nombreConyuge" : "",
+    "apellidoConyuge" : "",
+    "tipoDocumentoConyuge" : "",
+    "documentoConyugue" : "",
+    "status" : "BORRADOR",
+    "categoria" : "PRE INSCRIPTO",
+    "tipoEmpresa" : [ 
+        "CONSTRUCTORA"
+    ],
+    "vtoIeric" : "",
+    "archivoIERIC" : [],
+    "registroPublicoDeComercio" : "",
+    "igj" : "",
+    "domicilioLegal" : "Av. San Juan 3020",
+    "constanciaDomicilioLegal" : [],
+    "domicilioReal" : "Av. San Juan 3020",
+    "rubroConstruccion" : {
+        "lugar" : "",
+        "fecha" : "",
+        "datos" : ""
+    },
+    "autoridadesSociedad" : [],
+    "inversionesPermanentes" : [],
+    "autoridadesVencimiento" : true,
+    "sistemaCalidad" : [],
+    "ejercicios" : [],
+    "ejerciciosAprobados" : [],
+    "ddjjObras" : [],
+    "fechaInscripcionMatriculaComerciante" : "",
+    "aplicaDecretoDoscientosDos" : false,
+    "datosDecretoDoscientosDos" : [],
+    "matriculaComerciante" : {
+        "datos" : "",
+        "fecha" : ""
+    },
+    "altaAFIP" : {
+        "datos" : "",
+        "fecha" : ""
+    },
+    "ultimaModificacionMatriculaOActividadesAFIP" : {
+        "datos" : "",
+        "fecha" : ""
+    },
+    "poseeIERIC" : true,
+    "datosSocietarios" : {
+        "cooperativa" : {
+            "archivoActaConstitutiva" : [],
+            "inscriptionINAES" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modificacionINAES" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            },
+            "ultimaModifcacionINAES" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            }
+        },
+        "sociedadAnonima" : {
+            "inscripcion" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modificacion" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            },
+            "ultimaModificacion" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            },
+            "contrato" : {
+                "fecha" : "07/01/2019",
+                "archivos" : []
+            }
+        },
+        "ute" : {
+            "archivosContrato" : [],
+            "inscripcionUTE" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modificacionUTE" : {
+                "fecha" : "",
+                "datos" : "",
+                "archivos" : []
+            }
+        },
+        "PJESP" : {
+            "archivosContrato" : [],
+            "archivoModificacion" : [],
+            "archivoUltimaModificacion" : [],
+            "inscripcionConstitutiva" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "inscripcionSucursal" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modifcicacionObjeto" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "ultimaModificacionInscripcion" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "fechaVencimiento" : {
+                "fecha" : ""
+            }
+        },
+        "personaFisica" : {
+            "constanciaInscripcion" : [],
+            "constanciaMatriculaComerciante" : []
+        },
+        "fechaInscripcion" : "",
+        "fechaVencimiento" : "",
+        "archivoAutoridades" : []
+    },
+    "createdAt" : "2021-04-05T12:32:09.172Z"
+}

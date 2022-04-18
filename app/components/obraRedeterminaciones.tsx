@@ -46,6 +46,7 @@ export const ObrasRedeterminaciones: React.FC<ObrasRedeterminacionesProps> = ({
 	const [redeterinacionSeleccionada, setRedeterminacionSeleccionada] = useState(null)
 	const [showMotivoRechazo, setShowMotivoRechazo] = useState(false)
 	const [motivoRechazo, setMotivoRechazo] = useState('')
+	const [observacionRegistro, setObservacionRegistro] = useState('')
 
 	const [idRedeterminaciones, setIdRedeterminaciones] = useState('')
 
@@ -95,6 +96,8 @@ export const ObrasRedeterminaciones: React.FC<ObrasRedeterminacionesProps> = ({
 		setDescripcion(record.descripcion)
 		setArchivos(record.archivos)
 		setMonto(record.monto)
+		setObservacionRegistro(record.observacionRegistro)
+		
 	  }
 
 	let columnsRedeterminaciones = [

@@ -1,0 +1,41 @@
+swagger: "2.0"
+info:
+  title: Sample API
+  description: API description in Markdown.
+  version: 1.0.0
+host: localhost:3000/api
+
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:  
+  -JWT: []
+
+schemes:
+  - http
+paths:
+  /tramite/getTramitesParaVerificar:
+    get:
+      parameters:
+        - name: authorization
+          in: header
+          description: an authorization header
+          required: true
+          type: string
+      security:  
+        -JWT: []
+      summary: Devuelve una lista de tramites pendientes a verificar
+      description: Devuelve una lista de los tramites a verificar dado un token valido 
+      produces:
+        - application/json
+      responses:
+        200: 
+          description: Devuelve una lista de tipo tramites.
+        401:
+          description: En el caso que el token no sea correcto o bien no sea provisto
+      
+      

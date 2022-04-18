@@ -81,6 +81,7 @@ export default () => {
   const [modo, setModo] = useState(MODO.NEW)
   const [showMotivoRechazo, setShowMotivoRechazo] = useState(false)
   const [motivoRechazo, setMotivoRechazo] = useState('')
+  const [observacionRegistro,setObservacionRegistro] = useState('')
  
 
   const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null)
@@ -375,6 +376,9 @@ export default () => {
     setVentasDelEjercicio(r.ventasEjercicio)
     setArchivos(r.archivos)
     setArchivosActaAsamblea(r.archivosActaAsamblea)
+    setObservacionRegistro(r.observacionRegistro)
+    
+  
 
   }
  
@@ -621,12 +625,14 @@ export default () => {
       ventasEjercicio: ventasDelEjercicio,
       archivos,
       archivosActaAsamblea,
-      codigo:getCodigoObra()
+      codigo:getCodigoObra(),
+      observacionRegistro
     })
     setArchivos([])
     setArchivosActaAsamblea([])
     setCierreEjercicio(null)
     setInicioEjercicio(null)
+    setObservacionRegistro('')
     setTramite(Object.assign({}, tramite))
     await save()
     setModalEjercicios(false)
