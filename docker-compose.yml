@@ -57,9 +57,9 @@ services:
     volumes:
       - ./data/ipfs:/ipfsdata
       - ./.ipfs_config:/root/.ipfs/config
-       ports:
-        - 4001:4001
-        - 5001:5001
+    ports:
+      - 4001:4001
+      - 5001:5001
 
 volumes:
   datadb:
