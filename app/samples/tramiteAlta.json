@@ -1,0 +1,75 @@
+[{
+    "_id" : "XOhDHn8NDb7Qkt0vToTEn",
+    "apoderados" : [ 
+        {
+            "esAdministrador" : false,
+            "imagenesDni" : [],
+            "apellido" : "Argento",
+            "nombre" : " Pepe",
+            "email" : "pepe@argento.com",
+            "cuit" : "2345432",
+            "nroDocumento" : "23",
+            "tipoDocumento" : ""
+        }
+    ],
+    "certificadoFiscal" : null,
+    "cuit" : "1234567890",
+    "email" : "mail@institucional.com",
+    "id" : "",
+    "ieric" : "1233",
+    "nroLegajo" : "12312543",
+    "personeria" : "SA",
+    "propietario" : null,
+    "razonSocial" : "Corralon Ciudadela 2",
+    "status" : "BORRADOR",
+    "tipoEmpresa" : [ 
+        "CONSTRUCTORA"
+    ],
+    "registroPublicoDeComercio" : "Registro",
+    "igj" : "",
+    "domicilioLegal" : "Acceso Oeste 44, Ciudadela, Buenos Aires, Argentina",
+    "domicilioReal" : "Acceso oeste 44, Ciudadela, Buenos Aires, Argentina",
+    "rubroConstruccion" : {
+        "lugar" : "CABA",
+        "fecha" : "14/12/2020",
+        "datos" : "Datos"
+    },
+    "createdAt" : "2020-12-13T21:52:41.736Z",
+    "creatorId" : {
+        "iss" : "Registro de Constructores",
+        "iat" : 1607868414,
+        "aud" : "http://localhost",
+        "sub" : "leonardoleenen@gmail.com",
+        "GivenName" : "Leonardo ",
+        "Surname" : "Leenen",
+        "Email" : "leonardoleenen@gmail.com",
+        "Role" : [ 
+            "CONSTRUCTOR"
+        ]
+    },
+    "vtoIeric" : "08/12/2020",
+    "autoridadesSociedad" : [],
+    "sistemaCalidad" : [],
+    "ejercicios" : [ 
+        {
+            "fechaCierre" : "15/12/2020",
+            "fechaInicio" : "28/12/2020",
+            "activoCorriente" : 0,
+            "activoNoCorriente" : 0,
+            "pasivoCorriente" : 0,
+            "pasivoNoCorriente" : 0,
+            "capitalSuscripto" : 0,
+            "ventasEjercicio" : 0
+        }, 
+        {
+            "fechaCierre" : "14/12/2020",
+            "fechaInicio" : "15/12/2020",
+            "activoCorriente" : "100",
+            "activoNoCorriente" : "122",
+            "pasivoCorriente" : 0,
+            "pasivoNoCorriente" : 0,
+            "capitalSuscripto" : 0,
+            "ventasEjercicio" : 0
+        }
+    ]
+}]

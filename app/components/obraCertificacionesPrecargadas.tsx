@@ -65,8 +65,7 @@ export const CertificacionesPrecargadas: React.FC<CertificacionesPrecargadasProp
   setArchivos(record.archivos)
   setMonto(record.monto)
   setObservacionRegistro(record.observacionRegistro)
-
-
+  setMotivoRechazo(record.motivoRechazo)
  }
 
   const Accion = (prop) => {
@@ -211,6 +210,7 @@ export const CertificacionesPrecargadas: React.FC<CertificacionesPrecargadasProp
         monto,
         descripcion,
         archivos,
+        observacionRegistro:motivoRechazo
       })
 
       console.log(periodosCopy)
@@ -231,7 +231,7 @@ export const CertificacionesPrecargadas: React.FC<CertificacionesPrecargadasProp
     setMonto(0)
     setDescripcion('')
     setPeriodoSeleccionado(null)
-
+    setObservacionRegistro('')
   }
 
 

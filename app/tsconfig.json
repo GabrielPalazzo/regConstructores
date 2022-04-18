@@ -22,13 +22,14 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "preserve",
-    "isolatedModules": true
+    "isolatedModules": true    
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "jobs/patch_ipfs.js"  ],
+    "**/*.tsx",
+    "jobs/patch_ipfs.js"
+  ],
   "exclude": [
     "node_modules",
     "node_modules/ipfs-core-types/src/index.ts",

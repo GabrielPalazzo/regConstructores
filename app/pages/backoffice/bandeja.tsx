@@ -313,7 +313,7 @@ export default () => {
 
           </TabPane>
 
-          <TabPane tab={`A Supervisar (${tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO'  ).filter((t: TramiteAlta) => t.status === 'A SUPERVISAR').length})`} key="4">
+          <TabPane tab={`A Supervisar (${tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO'  ).filter((t: TramiteAlta) => t.status === 'A SUPERVISAR' ||  t.status === 'SUBSANADO A SUPERVISAR').length})`} key="4">
   {tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR').filter((t: TramiteAlta) => t.status === 'A SUPERVISAR' || t.status === 'SUBSANADO A SUPERVISAR').map((t: TramiteAlta) => (
              <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
                 <div className="flex justify-between">

@@ -202,11 +202,6 @@ Cualquier trámite de actualización, ya sea por la Actualización anual, genera
           </div>
         </Card>}
 
-
-
-
-
-
     </div>
   }
 
@@ -255,12 +250,12 @@ Cualquier trámite de actualización, ya sea por la Actualización anual, genera
         tramite={tramite} />
         </div>*/}
         <Button type="primary" onClick={() => {
-          setIsLoading(true)
-          sendTramite(tramite).then(result => {
+          setIsLoading(true)          
+          sendTramite(tramite).then(result => {            
             dispatch(saveTramite(result))
             router.push('/')
           })
-        }}>Confirmar trámite</Button>
+        }}>Confirmar Trámite</Button>
       </div>
     </div>
   }

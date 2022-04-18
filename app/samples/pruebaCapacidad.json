@@ -1,0 +1,158 @@
+{
+    "_id" : "YxCLNBWIO4FcrsS4Qa4Bz",
+    "rechazos" : [],
+    "apoderados" : [],
+    "creatorId" : {
+        "iat" : 1617625073,
+        "cuit" : "27049902072",
+        "GivenName" : "NILDA",
+        "Surname" : "ENMA",
+        "email" : "",
+        "sub" : "35420b79-aa9f-4f75-a3f5-543e9a6a5515",
+        "Role" : [ 
+            "CONSTRUCTOR"
+        ]
+    },
+    "inscripcionAFIPConstancia" : [],
+    "certificadoFiscal" : null,
+    "cuit" : "20367628376",
+    "telefono" : "",
+    "telefonoAlternativo" : "",
+    "email" : "",
+    "id" : "",
+    "ieric" : "",
+    "nroLegajo" : "",
+    "personeria" : "SRL",
+    "propietario" : null,
+    "propietarios" : [],
+    "emailInstitucional" : "",
+    "razonSocial" : "PRUEBA CAPACIDAD PABLO S.R.L.",
+    "nombreTitular" : "",
+    "apellidoTitular" : "",
+    "esCasadoTitular" : false,
+    "nombreConyuge" : "",
+    "apellidoConyuge" : "",
+    "tipoDocumentoConyuge" : "",
+    "documentoConyugue" : "",
+    "status" : "BORRADOR",
+    "categoria" : "PRE INSCRIPTO",
+    "tipoEmpresa" : [],
+    "vtoIeric" : "",
+    "archivoIERIC" : [],
+    "registroPublicoDeComercio" : "",
+    "igj" : "",
+    "domicilioLegal" : "",
+    "constanciaDomicilioLegal" : [],
+    "domicilioReal" : "",
+    "rubroConstruccion" : {
+        "lugar" : "",
+        "fecha" : "",
+        "datos" : ""
+    },
+    "autoridadesSociedad" : [],
+    "inversionesPermanentes" : [],
+    "autoridadesVencimiento" : true,
+    "sistemaCalidad" : [],
+    "ejercicios" : [],
+    "ejerciciosAprobados" : [],
+    "ddjjObras" : [],
+    "fechaInscripcionMatriculaComerciante" : "",
+    "aplicaDecretoDoscientosDos" : false,
+    "datosDecretoDoscientosDos" : [],
+    "matriculaComerciante" : {
+        "datos" : "",
+        "fecha" : ""
+    },
+    "altaAFIP" : {
+        "datos" : "",
+        "fecha" : ""
+    },
+    "ultimaModificacionMatriculaOActividadesAFIP" : {
+        "datos" : "",
+        "fecha" : ""
+    },
+    "poseeIERIC" : true,
+    "datosSocietarios" : {
+        "cooperativa" : {
+            "archivoActaConstitutiva" : [],
+            "inscriptionINAES" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modificacionINAES" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            },
+            "ultimaModifcacionINAES" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            }
+        },
+        "sociedadAnonima" : {
+            "inscripcion" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modificacion" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            },
+            "ultimaModificacion" : {
+                "datos" : "",
+                "fecha" : "",
+                "archivos" : []
+            },
+            "contrato" : {
+                "fecha" : "",
+                "archivos" : []
+            }
+        },
+        "ute" : {
+            "archivosContrato" : [],
+            "inscripcionUTE" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modificacionUTE" : {
+                "fecha" : "",
+                "datos" : "",
+                "archivos" : []
+            }
+        },
+        "PJESP" : {
+            "archivosContrato" : [],
+            "archivoModificacion" : [],
+            "archivoUltimaModificacion" : [],
+            "inscripcionConstitutiva" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "inscripcionSucursal" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "modifcicacionObjeto" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "ultimaModificacionInscripcion" : {
+                "datos" : "",
+                "fecha" : ""
+            },
+            "fechaVencimiento" : {
+                "fecha" : ""
+            }
+        },
+        "personaFisica" : {
+            "constanciaInscripcion" : [],
+            "constanciaMatriculaComerciante" : []
+        },
+        "fechaInscripcion" : "",
+        "fechaVencimiento" : "",
+        "archivoAutoridades" : []
+    },
+    "createdAt" : "2021-04-05T12:18:44.220Z"
+}
