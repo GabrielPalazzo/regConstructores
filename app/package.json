@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
-    "@react-pdf/renderer": "^2.0.5",
+    "@react-pdf/renderer": "2.0.5",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.10.1",
     "antd": "^4.12.3",
