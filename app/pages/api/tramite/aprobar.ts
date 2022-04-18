@@ -78,7 +78,7 @@ handler.post(async (req: any, res: NextApiResponse) => {
   const tramiteActualizado = await finalizarTramite(tramite, req.user, req.db)
   try {
     const certificado = await generarCertificado(tramiteActualizado, req.user, req.db)
-    console.log(certificado.tramite);
+    //console.log(certificado.tramite);
     if (Object.keys(certificado.tramite).length == 0) {
       res.status(500).send('No es posible generar el Certificado de Capacidad')
     };
