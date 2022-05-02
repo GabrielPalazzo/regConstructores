@@ -1401,7 +1401,7 @@ export default (props) => {
 
 
           </Svg>
-          <Text style={{ fontSize: '10pt', marginLeft: -100 }}>2022 - Las Malvinas son argentinas</Text>
+          <Text style={{ fontSize: '10pt', marginLeft: -200 }}>2022 - Las Malvinas son argentinas</Text>
         </View>
         <View style={styles.sectionContentHead} >
           <View style={styles.sectionContentHeadColumn3}  >
@@ -1565,19 +1565,12 @@ export default (props) => {
         </View>
         <View style={styles.sectionFooter} >
           <Text style={styles.sectionFooterBold}>ONC |
-            <Text style={styles.sectionFooterRegular}>OFICINA NACIONAL DE CONTRATACIONES </Text>
+            <Text style={styles.sectionFooterRegular}> OFICINA NACIONAL DE CONTRATACIONES </Text>
           </Text>
         </View>
-
-
       </Page>
     </Document>
   );
-
-
-
-
-
 }
 
 
