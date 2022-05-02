@@ -1401,7 +1401,7 @@ export default (props) => {
 
 
           </Svg>
-          <Text >2022 - Las Malvinas son argentinas</Text>
+          <Text style={{ fontSize: '10pt', marginLeft: -100 }}>2022 - Las Malvinas son argentinas</Text>
         </View>
         <View style={styles.sectionContentHead} >
           <View style={styles.sectionContentHeadColumn3}  >
