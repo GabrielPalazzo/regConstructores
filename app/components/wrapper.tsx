@@ -40,12 +40,12 @@ export default (props) => {
     if (!r || r.length == 0)
       return "#1890ff"
 
-    if (_.last(r).field.toUpperCase() === attributeName.toUpperCase()) {
+    if ((_.last(r) as any).field.toUpperCase() === attributeName.toUpperCase()) {
       if (handUp)
-        return _.last(r).isOk ? 'green' : '#e2e8f0'
+        return (_.last(r) as any).isOk ? 'green' : '#e2e8f0'
       else
-        return !_.last(r).isOk ? 'red' : '#e2e8f0'
-    }
+        return !(_.last(r) as any).isOk ? 'red' : '#e2e8f0'
+    }    
   }
 
   const like = () => {
@@ -94,7 +94,7 @@ export default (props) => {
     if (!r || r.length === 0)
       return ''
 
-    return _.last(r).review
+    return (_.last(r) as any).review
   }
 
  
