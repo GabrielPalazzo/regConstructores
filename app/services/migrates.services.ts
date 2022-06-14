@@ -55,7 +55,7 @@ class ConnectionManager {
 
       }
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       return {
         success: false,
         error
@@ -88,7 +88,7 @@ export class MigrateService extends ConnectionManager {
           ...result.data
         })
 
-        console.log('PreInscripcion Migrada')
+        //console.log('PreInscripcion Migrada')
       }
     })
   }
@@ -108,7 +108,7 @@ export class MigrateService extends ConnectionManager {
           ...result.data.Data
         })
 
-        console.log('InfoBasica Migrada')
+        //console.log('InfoBasica Migrada')
       }
     })
   }
@@ -126,7 +126,7 @@ export class MigrateService extends ConnectionManager {
           _id: codigoProveedor,
           ...result.data.Data
         })
-        console.log('Balances Migrados')
+        //console.log('Balances Migrados')
       }
     })
   }
@@ -157,7 +157,7 @@ export class MigrateService extends ConnectionManager {
           const result = []
           if (!obras)
             obras = []
-          console.log(`Parseando ${obras.length} Obras`)
+          //console.log(`Parseando ${obras.length} Obras`)
           let contador = 0
           for (let obra of obras) {
             waitTill = new Date(new Date().getTime() + 1 * 150)
@@ -165,7 +165,7 @@ export class MigrateService extends ConnectionManager {
 
             while (waitTill > new Date(new Date().getTime())) { }
             obras[contador] = obra
-            console.log(`Obra ${contador + 1} `)
+            //console.log(`Obra ${contador + 1} `)
             contador += 1
           }
           return obras
@@ -178,7 +178,7 @@ export class MigrateService extends ConnectionManager {
         })
 
 
-        console.log('Obras Migradas')
+        //console.log('Obras Migradas')
       }
     })
   }
@@ -195,7 +195,7 @@ export class MigrateService extends ConnectionManager {
           _id: codigoProveedor,
           ...result.data
         })
-        console.log(`Certificado Migrado. Proveedor ${codigoProveedor}`)
+        //console.log(`Certificado Migrado. Proveedor ${codigoProveedor}`)
       }
     })
   }
@@ -318,7 +318,7 @@ export class Parser extends ConnectionManager {
   }
 
   private determinarCategoria(categoria){
-    console.log(categoria)
+    //console.log(categoria)
     if (_.includes(['Desactualizado por formulario','Inscripto con Actualización' ],categoria))
       return 'INSCRIPTO CON ACTUALIZACION'
 
@@ -347,7 +347,7 @@ export class Parser extends ConnectionManager {
     this.tramite.domicilioReal = `${this.datosBasicos.DomicilioEspecialDC.NombreCalle} ${this.datosBasicos.DomicilioEspecialDC.Altura}, ${this.datosBasicos.DomicilioEspecialDC.Localidad.Descripcion} ${this.datosBasicos.DomicilioEspecialDC.Localidad.Departamento.Provincia.Descripcion}  ${this.datosBasicos.DomicilioEspecialDC.Localidad.Departamento.Provincia.Pais.Descripcion}`
 
     this.tramite.createdAt = new Date()
-    console.log('Info Basica Parseada')
+    //console.log('Info Basica Parseada')
   }
 
   parseObras() {
@@ -448,11 +448,11 @@ export class Parser extends ConnectionManager {
     }
 
     this.tramite.ddjjObras = this.obras.obras.map(o => parseObra(o.detalle[0]))
-    console.log('Obras Parseada')
+    //console.log('Obras Parseada')
   }
 
   async save() {
-    console.log('Tramite Cargado ')
+    //console.log('Tramite Cargado ')
     const db = await this.client.db(config.registro.dataBase)
 
     const tramiteAnterior = await db.collection('tramites').findOne({
@@ -501,9 +501,9 @@ export class Parser extends ConnectionManager {
     }
 
     await db.collection('tramites').save(newTramite);
-    console.log('Tramite Cargado ')
+    //console.log('Tramite Cargado ')
     await db.collection('certificadosOtorgados').save(certificado);
-    console.log('Certificado Generado')
+    //console.log('Certificado Generado')
       
   }
 }

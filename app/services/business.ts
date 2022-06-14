@@ -35,8 +35,7 @@ export const getTramitesParaVerificar = (): Promise<Array<TramiteAlta>> => {
   })
 }
 
-
-export const getTramites = (): Promise<Array<TramiteAlta>> => {
+export const getTramites = (): Promise<Array<TramiteAlta>> => {  
   return axios.get('/api/tramites', {
     headers: {
       Authorization: 'Bearer ' + getToken()

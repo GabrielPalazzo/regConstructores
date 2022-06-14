@@ -106,7 +106,7 @@ export const HeaderPrincipal: React.FC<HeaderPrincipalProps> = ({
     const handleConfirmarAcutalizar = async () => {
       setWaitingConfirmFromServer(true)
       const newTramite = await cambiarADesActualizado(tramite)
-      console.log('tramite:', newTramite._id)
+      // console.log('tramite:', newTramite._id); // ## Comentado
       await dispatch(setUpdateBorrador(newTramite))
       await dispatch(cargarUltimaRevisionAbierta(newTramite))
       router.push('/informacion_basica')

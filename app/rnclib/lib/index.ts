@@ -113,7 +113,6 @@ export class CalculadoraCapacidad {
 
     if (this._empresa.personeria === 'PJESP') {
       fechaInscripcion = this._empresa.datosSocietarios.PJESP.modifcicacionObjeto.fecha.length === 10 ? moment(this._empresa.datosSocietarios.PJESP.modifcicacionObjeto.fecha, 'DD/MM/YYYY').toDate() : moment(this._empresa.datosSocietarios.PJESP.modifcicacionObjeto.fecha).toDate()
-      // console.log(fechaInscripcion)
       return moment().diff(fechaInscripcion, 'years')
     }
 
@@ -204,8 +203,8 @@ export class CalculadoraCapacidad {
       .filter(o => moment(this.getUltimoEjercicio().fechaCierre, 'DD/MM/YYYY').toDate().getTime() >= o.time)
 
 
-    console.log('Empresa: ', this._empresa.razonSocial)
-    console.log('Ultimo Ejercicio: ', moment(this.getUltimoEjercicio().fechaCierre, 'DD/MM/YYYY').format('DD/MM/YYYY'))
+    console.log('#### Empresa: ', this._empresa.razonSocial)
+    console.log('#### Ultimo Ejercicio: ', moment(this.getUltimoEjercicio().fechaCierre, 'DD/MM/YYYY').format('DD/MM/YYYY'))
 
 
     const list = []

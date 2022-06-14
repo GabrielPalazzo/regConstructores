@@ -204,16 +204,9 @@ export class CalculadoraCapacidad {
       .filter(o => moment(this.getUltimoEjercicio().fechaCierre, 'DD/MM/YYYY').toDate().getTime() >= o.time)
 
 
-    console.log(this._empresa.razonSocial)
-    console.log(moment(this.getUltimoEjercicio().fechaCierre, 'DD/MM/YYYY').format('DD/MM/YYYY'))
-    /*
- console.log(this._empresa.ddjjObras
-    .reduce((acc, { certificaciones, id, datosObra }) => [...acc, ...certificaciones], [])
-    .map(parseCertificacion)
-    .filter(o => moment(this.getUltimoEjercicio().fechaCierre, 'DD/MM/YYYY').toDate().getTime() < o.time))*/
-
-
-
+    //console.log(this._empresa.razonSocial)
+    //console.log(moment(this.getUltimoEjercicio().fechaCierre, 'DD/MM/YYYY').format('DD/MM/YYYY'))
+    
     const list = []
     for (let e of this._empresa.ejercicios.filter(ej => moment().diff(moment(ej.fechaCierre, 'DD/MM/YYYY'), 'years') <= 10)) {
       const montoAccumulado = listCruda.filter(cert => cert.time >= moment(e.fechaInicio, 'DD/MM/YYYY').valueOf() && cert.time <= moment(e.fechaCierre, 'DD/MM/YYYY').valueOf())

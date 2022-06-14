@@ -55,7 +55,7 @@ export const saveTramite = (tramite: TramiteAlta) => async (dispatch, getState) 
 
   if (tramite == null) {    
     const tramiteAnterior: TramiteAlta = getState().appStatus.tramiteAlta;
-    const tanterior = await saveTramiteService(tramiteAnterior);
+    const tanterior = await saveTramiteService(tramiteAnterior);    
     throw new Error('No es posible generar el Certificado de Capacidad');
   };
 

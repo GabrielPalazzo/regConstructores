@@ -25,20 +25,14 @@ handler.get(async (req: any, res: NextApiResponse) => {
       }
   })
 
-  console.log(tramite.data)
+  // console.log(tramite.data)
 
   if (!client.isConnected()) await client.connect();
   const db = client.db(process.env.DB_NAME);
   await db
     .collection('tramites')
     .insertOne(tramite.data.tramite);
-  res.send('Done')
-  /*
-  await req.db
-    .collection('tramites')
-    .save(tramite);*/
-
- 
+  res.send('Done')  
   
 });
 

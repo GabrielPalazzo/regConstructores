@@ -123,8 +123,8 @@ export const Certificado: React.FC<CertificadoProps> = ({
             <PDFDownloadLink document={<CertificadoPDF certificado={certificado} />} fileName="certificado.pdf">
             
               {({ blob, url, loading, error }) =>{
-                console.log(certificado)
-                return loading ? 'Loading document...' : 'Descargar Certificado'
+                // console.log(certificado) // ## Comentado
+                return loading ? 'Cargando documento...' : 'Descargar Certificado'
               }
                 
               }

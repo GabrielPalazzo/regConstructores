@@ -20,7 +20,7 @@ export default () => {
   const tipoAccion = useSelector((state: RootState) => state.appStatus.tipoAccion)
 
 
-  const loadTramites = async () => {
+  const loadTramites = async () => {    
     setTramites(await getTramites())
   }
 
@@ -138,7 +138,7 @@ export default () => {
     <div className="pb-4 text-center  border-gray-200 border-t-2" >
 
 
-     <div className="text-sm mt-2"> version: 1.26</div> 
+     <div className="text-sm mt-2"> version: 1.27</div> 
 
 
   </div>

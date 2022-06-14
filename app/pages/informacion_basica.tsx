@@ -30,17 +30,17 @@ const { TextArea } = Input
 
 const { Option } = Select;
 function confirm(e) {
-  console.log(e);
+  //console.log(e);
   message.success('Se elimino correctamente');
 }
 
 function cancel(e) {
-  console.log(e);
+  //console.log(e);
   message.error('Ha cancelado la operacion');
 }
 
 function onChange(pagination, filters, sorter, extra) {
-  console.log('params', pagination, filters, sorter, extra);
+  //console.log('params', pagination, filters, sorter, extra);
 }
 
 
@@ -294,7 +294,7 @@ export default (props) => {
         value={usuarioApoderado.status}
         onChange={e => {
           setApoderadosSeleccionado(usuarioApoderado)
-          console.log(apoderadosSeleccionado)
+          //console.log(apoderadosSeleccionado)
           if (e === 'OBSERVADO'){
            setShowMotivoRechazo(true)
            
@@ -599,7 +599,7 @@ export default (props) => {
                 setActaAutoridadesApoderado(Object.assign([], actaAutoridadesApoderado))
               }}
               onRemove={fileToRemove => {
-                console.log(fileToRemove)
+                //console.log(fileToRemove)
 
                 setActaAutoridadesApoderado(Object.assign([], actaAutoridadesApoderado.filter(f => f.cid !== fileToRemove.uid)))
               }}
@@ -620,7 +620,7 @@ export default (props) => {
                 setActaAdminLegitimado(Object.assign([], actaAdminLegitimado))
               }}
               onRemove={fileToRemove => {
-                console.log(fileToRemove)
+                //console.log(fileToRemove)
 
                 setActaAdminLegitimado(Object.assign([], actaAdminLegitimado.filter(f => f.cid !== fileToRemove.uid)))
               }}
@@ -897,7 +897,7 @@ export default (props) => {
                   save()
                 }}
                 onRemove={fileToRemove => {
-                  console.log(fileToRemove)
+                  //console.log(fileToRemove)
 
                   tramite.inscripcionAFIPConstancia = tramite.inscripcionAFIPConstancia.filter(f => f.cid !== fileToRemove.uid)
                   save()
@@ -987,7 +987,7 @@ export default (props) => {
                 labelRequired="*"
                 value={tramite.tipoDocumentoConyuge}
                 bindFunction={value => {
-                  console.log(value)
+                  //console.log(value)
                   tramite.tipoDocumentoConyuge = value
                   setTramite(Object.assign({}, tramite))
                 }}
@@ -1026,7 +1026,7 @@ export default (props) => {
                     save()
                   }}
                   onRemove={fileToRemove => {
-                    console.log(fileToRemove)
+                    //console.log(fileToRemove)
 
                     tramite.archivoDocConyuge = tramite.archivoDocConyuge.filter(f => f.cid !== fileToRemove.uid)
                     save()

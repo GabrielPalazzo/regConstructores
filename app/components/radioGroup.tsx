@@ -10,7 +10,7 @@ const customColors = ['#2897D4'];
 const { Option } = Select;
 
 function handleChange(value) {
-  console.log(`selected ${value}`);
+  // console.log(`selected ${value}`); // ## Comentado
 }
 
 interface Props {

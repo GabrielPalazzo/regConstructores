@@ -29,12 +29,12 @@ import { RootState } from '../redux/store';
 import wrapper from '../components/wrapper';
 
 function confirm(e) {
-  console.log(e);
+  //console.log(e);
   message.success('Se elimino correctamente');
 }
 
 function cancel(e) {
-  console.log(e);
+  //console.log(e);
   message.error('Ha cancelado la operacion');
 }
 
@@ -112,7 +112,7 @@ export default () => {
 
 
 
-  console.log(tramite)
+  //console.log(tramite)
   const { Step } = Steps;
   const renderModalCalidad = () => {
     return (<div>

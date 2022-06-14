@@ -21,7 +21,7 @@ const Panel = Collapse.Panel;
 const { TextArea } = Input;
 
 function callback(key) {
-  console.log(key);
+  //console.log(key);
 }
 
 const customPanelStyle = {

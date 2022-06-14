@@ -27,7 +27,7 @@ interface Props {
 
 export default (props: Props) => {
 
-  console.log(props.value)
+  // console.log(props.value); // ## Comentado
   const tramite: TramiteAlta = useSelector((state: RootState) => state.appStatus.tramiteAlta)
 
   return (<div >

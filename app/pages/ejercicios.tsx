@@ -33,16 +33,16 @@ const { Option } = Select;
 const { TextArea } = Input
 
 function confirm(e) {
-  console.log(e);
+  //console.log(e);
   message.success('Se elimino correctamente');
 }
 
 function cancel(e) {
-  console.log(e);
+  //console.log(e);
   message.error('Ha cancelado la operacion');
 }
 function onChange(pagination, filters, sorter, extra) {
-  console.log('params', pagination, filters, sorter, extra);
+  //console.log('params', pagination, filters, sorter, extra);
 }
 
 const MODO = {
@@ -110,12 +110,12 @@ export default () => {
   }
 
   function callback(key) {
-    console.log(key);
+    //console.log(key);
   }
 
 
   function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra);
+    //console.log('params', pagination, filters, sorter, extra);
   }
 
 
@@ -391,7 +391,7 @@ export default () => {
         value={ejercicio.status}
         onChange={e => {
           setEjercicioSeleccionado(ejercicio)
-          console.log(ejercicioSeleccionado)
+          //console.log(ejercicioSeleccionado)
           if (e === 'OBSERVADO'){
            setShowMotivoRechazo(true)
           }

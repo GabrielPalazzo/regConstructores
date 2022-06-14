@@ -25,7 +25,7 @@ const doPreflight = async  (key) => {
 
     }
   }catch(error){
-    console.log(error)
+    //console.log(error)
     return {
       success: false, 
       error

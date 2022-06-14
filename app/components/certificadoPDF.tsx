@@ -953,7 +953,7 @@ export default (props) => {
   const especialidades = _.concat(props.certificado.tramite.ddjjObras.map((o: DDJJObra) => getDescripcionEspecialidad(o.especialidad1)), props.certificado.tramite.ddjjObras.map((o: DDJJObra) => getDescripcionEspecialidad(o.especialidad2)))
 
   const getEstadoText = () => {
-    console.log(props.certificado)
+    // console.log(props.certificado); // ## Comentado
 
     const cert = props.certificado
     if (cert.tramite.categoria === 'INSCRIPTO')

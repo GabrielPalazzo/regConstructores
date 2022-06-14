@@ -8,8 +8,7 @@ const endpoint = async (req, res) => {
   try {
     const { id: documentId, name } = req.query;
     const fileName = 'rnc_private_doc.pdf';
-
-    // console.log(req.query.id);
+    
     const client = ipfsClient({
       host: process.env.IPFS_NODE_HOST,
       protocol: process.env.IPFS_NODE_PROTOCOL,

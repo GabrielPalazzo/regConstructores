@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Tabs, Collapse, Tag, Menu, Dropdown, Avatar,Input,Select } from 'antd';
+import { Button, Card, Tabs, Collapse, Tag, Menu, Dropdown, Avatar, Input, Select } from 'antd';
 import { ArrowRightOutlined, DownCircleOutlined, CloudDownloadOutlined, LockFilled, UnlockFilled } from '@ant-design/icons';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
-import { closeSession, getObservacionesTecnicoRaw, getReviewAbierta, getTramiteByCUIT, getUsuario,getTramiteByID } from '../../services/business';
+import { closeSession, getObservacionesTecnicoRaw, getReviewAbierta, getTramiteByCUIT, getUsuario, getTramiteByID } from '../../services/business';
 import { Loading } from '../../components/loading'
 import { getTramitesParaVerificar } from '../../services/business'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,7 +18,7 @@ const { TabPane } = Tabs;
 const Panel = Collapse.Panel;
 
 function callback(key) {
-  console.log(key);
+  //console.log(key);
 }
 
 const { Search } = Input;
@@ -60,9 +60,9 @@ export default () => {
     closeSession()
     router.push('/login')
   }
-  const filtrarTramiteporEstado =(e)=>{
-    console.log(e.target.value)
-    e.target.value !== 'TODOS' ? setTramites(tramitesOriginal.filter(tr => tr.status === e.target.value )) : setTramites(tramitesOriginal)
+  const filtrarTramiteporEstado = (e) => {
+    //console.log(e.target.value)
+    e.target.value !== 'TODOS' ? setTramites(tramitesOriginal.filter(tr => tr.status === e.target.value)) : setTramites(tramitesOriginal)
 
   }
 
@@ -71,7 +71,7 @@ export default () => {
       <Menu.Item>
         <div onClick={cerrarSesion}>
           Cerra sesión
-          </div>
+        </div>
       </Menu.Item>
 
     </Menu>
@@ -109,118 +109,118 @@ export default () => {
       <div className="px-4 md:px-20 py-6  ">
         <div className="text-2xl font-bold py-4">{`Hola ${usuario.GivenName} ${usuario.Surname}`} </div>
         <div>
-        <div className="text-sml font-bold py-4">Filtrar por Estado 
-                <select 
-                className="border ml-5 p-2 rounded-xl shadow-2xl"
-                onChange={filtrarTramiteporEstado}>
-                
-                  <option value="TODOS">TODOS</option>
-                  <option value="OBSERVADO">OBSERVADO</option>
-                  <option value="PENDIENTE DE REVISION"> PENDIENTE DE REVISION</option>
-                  <option value="A SUPERVISAR" >A SUPERVISAR</option>
-                  <option value="SUBSANADO">SUBSANADO</option>
-                  <option value="PENDIENTE DE APROBACION">PENDIENTE DE APROBACION</option>
-                  <option value="EN REVISION">EN REVISION</option>
-                  <option value="SUBSANADO EN REVISION">SUBSANADO EN REVISION</option>
-                  <option value="SUBSANADO A SUPERVISAR">SUBSANADO A SUPERVISAR</option>
-                </select>
-                </div>
-           </div>
-       
+          <div className="text-sml font-bold py-4">Filtrar por Estado
+            <select
+              className="border ml-5 p-2 rounded-xl shadow-2xl"
+              onChange={filtrarTramiteporEstado}>
+
+              <option value="TODOS">TODOS</option>
+              <option value="OBSERVADO">OBSERVADO</option>
+              <option value="PENDIENTE DE REVISION"> PENDIENTE DE REVISION</option>
+              <option value="A SUPERVISAR" >A SUPERVISAR</option>
+              <option value="SUBSANADO">SUBSANADO</option>
+              <option value="PENDIENTE DE APROBACION">PENDIENTE DE APROBACION</option>
+              <option value="EN REVISION">EN REVISION</option>
+              <option value="SUBSANADO EN REVISION">SUBSANADO EN REVISION</option>
+              <option value="SUBSANADO A SUPERVISAR">SUBSANADO A SUPERVISAR</option>
+            </select>
+          </div>
+        </div>
+
 
         <Tabs defaultActiveKey={getDefaultTabActive()} onChange={callback}>
-         
-        <TabPane tab={`Inscripciones (${tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' && t.status !== 'VERIFICADO'  && t.status !== 'BORRADOR').length})`} key="1">
-       
-        {_.sortBy(tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO'  && t.status !== 'BORRADOR' && t.status !== 'VERIFICADO' ), t => t.submitedAt).map((t: TramiteAlta) => (
-   
+
+          <TabPane tab={`Inscripciones (
           
-            //{_.sortBy(tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' && t.status !== 'BORRADOR'  && t.status !== 'VERIFICADO')).filter((t: TramiteAlta) => 
-            //t.status === 'PENDIENTE DE REVISION' ||  
-            //t.status === 'EN REVISION' || 
-            //t.status === 'OBSERVADO' ||  
-            //t.status === 'SUBSANADO' ||  
-            //t.status === 'A SUPERVISAR' ||  
-            //t.status === 'PENDIENTE DE APROBACION' ).map((t: TramiteAlta) => (
-              
-              <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
-                
-       <div className="flex justify-between">
-                  <div>
-                    <div className="flex">
-                    <div className="mr-2"><Tag >{t.categoria}</Tag></div>
-                     <div className="mr-2"><Tag color={getObservacionesTecnicoRaw(getReviewAbierta(t)) ? "orange" : "green"}>{t.status}</Tag></div>
-                      {!t.asignadoA ? <Tag color="green" className="" >
-                        <div><UnlockFilled /> Sin asignar </div>
-                      </Tag> : <Tag color="red" className="" >
-                        <div><LockFilled />{` ${t.asignadoA.GivenName} ${t.asignadoA.Surname}`} </div>
-                      </Tag>}
-                     
-                    </div>
-                    <div className=" text-lg font-bold mt-2 text-black-700">{t.razonSocial}</div>
-                    <div className=" text-xs mb-4  text-muted-700">Inicio del trámite: {moment(t.createdAt).format('DD/MM/YYYY HH:mm')}<br />
-                    <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm'):  moment(t.createdAt).format('DD/MM/YYYY HH:mm') }</div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
-                   <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
-                    <br />
-                  CUIT: {t.cuit}<br />
-                  Exp: {'A Definir'}</div>
-                  </div>
-                </div>
+          ${tramites.filter((t: TramiteAlta) =>
+            // t.asignadoA.cuit === usuario.cuit &&
+            t.categoria === 'PRE INSCRIPTO' &&
+            t.status !== 'VERIFICADO' &&
+            t.status !== 'BORRADOR').length})`} key="1">
 
-                <div>
-                  <div className="">
+            {_.sortBy(tramites.filter((t: TramiteAlta) =>
+              t.categoria === 'PRE INSCRIPTO' &&
+              t.status !== 'BORRADOR' &&
+              t.status !== 'VERIFICADO'), t => t.submitedAt).map((t: TramiteAlta) => (
+
+                <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
+
+                  <div className="flex justify-between">
                     <div>
-                      <div className="font-bold text-black-700 text-sm">Observaciones del técnico:</div>
-                      <div className=" text-muted-700 text-xs">{`Observaciones del técnico: ${getObservacionesTecnicoRaw(getReviewAbierta(t))}`}</div>
-                    </div>
-                    <div className="mt-4">
-                      <div className="font-bold text-primary-700 text-sm"> <CloudDownloadOutlined /> Descargar observaciones</div>
+                      <div className="flex">
+                        <div className="mr-2"><Tag >{t.categoria}</Tag></div>
+                        <div className="mr-2"><Tag color={getObservacionesTecnicoRaw(getReviewAbierta(t)) ? "orange" : "green"}>{t.status}</Tag></div>
+                        {!t.asignadoA ? <Tag color="green" className="" >
+                          <div><UnlockFilled /> Sin asignar </div>
+                        </Tag> : <Tag color="red" className="" >
+                          <div><LockFilled />{` ${t.asignadoA.GivenName} ${t.asignadoA.Surname}`} </div>
+                        </Tag>}
+
+                      </div>
+                      <div className=" text-lg font-bold mt-2 text-black-700">{t.razonSocial}</div>
+                      <div className=" text-xs mb-4  text-muted-700">Inicio del trámite: {moment(t.createdAt).format('DD/MM/YYYY HH:mm')}<br />
+                        <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm') : moment(t.createdAt).format('DD/MM/YYYY HH:mm')}</div>
+                        <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
+                        <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
+                        <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
+                        <br />
+                        CUIT: {t.cuit}<br />
+                        Exp: {'A Definir'}</div>
                     </div>
                   </div>
-                  <div className="text-right mt-4">
-                    <Button type="primary" onClick={async () => {
-                      const tramiteATrabajar = await getTramiteByID(t._id)
-                      await dispatch(setTramiteView(tramiteATrabajar))
-                      await dispatch(cargarUltimaRevisionAbierta(tramiteATrabajar))
-                      router.push('/informacion_basica')
 
-                    }}>ver tramite <ArrowRightOutlined /> </Button>
+                  <div>
+                    <div className="">
+                      <div>
+                        <div className="font-bold text-black-700 text-sm">Observaciones del técnico:</div>
+                        <div className=" text-muted-700 text-xs">{`Observaciones del técnico: ${getObservacionesTecnicoRaw(getReviewAbierta(t))}`}</div>
+                      </div>
+                      <div className="mt-4">
+                        <div className="font-bold text-primary-700 text-sm"> <CloudDownloadOutlined /> Descargar observaciones</div>
+                      </div>
+                    </div>
+                    <div className="text-right mt-4">
+                      <Button type="primary" onClick={async () => {
+                        const tramiteATrabajar = await getTramiteByID(t._id)
+                        await dispatch(setTramiteView(tramiteATrabajar))
+                        await dispatch(cargarUltimaRevisionAbierta(tramiteATrabajar))
+                        router.push('/informacion_basica')
+
+                      }}>ver tramite <ArrowRightOutlined /> </Button>
 
 
+                    </div>
                   </div>
+
                 </div>
-
-              </div>
-            ))}
+              ))}
           </TabPane>
-                         
-          <TabPane tab={`Actualizaciones (${tramites.filter((t: TramiteAlta) => t.categoria === 'DESACTUALIZADO'  && t.status !== 'VERIFICADO'   && t.status !== 'BORRADOR' ).length})`} key="2">
-           {_.sortBy(tramites.filter((t: TramiteAlta) => t.categoria === 'DESACTUALIZADO'  && t.status !== 'BORRADOR' && t.status !== 'VERIFICADO' ), t => t.submitedAt).map((t: TramiteAlta) => (
-            <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
-      <div className="flex justify-between">
+
+          <TabPane tab={`Actualizaciones (${tramites.filter((t: TramiteAlta) => t.categoria === 'DESACTUALIZADO' && t.status !== 'VERIFICADO' && t.status !== 'BORRADOR').length})`} key="2">
+            {_.sortBy(tramites.filter((t: TramiteAlta) => t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR' && t.status !== 'VERIFICADO'), t => t.submitedAt).map((t: TramiteAlta) => (
+              <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
+                <div className="flex justify-between">
                   <div>
                     <div className="flex">
-                    <div className="mr-2"><Tag >{t.categoria}</Tag></div>
+                      <div className="mr-2"><Tag >{t.categoria}</Tag></div>
                       <div className="mr-2"><Tag color={getObservacionesTecnicoRaw(getReviewAbierta(t)) ? "orange" : "green"}>{t.status}</Tag></div>
                       {!t.asignadoA ? <Tag color="green" className="" >
                         <div><UnlockFilled /> Sin asignar </div>
                       </Tag> : <Tag color="red" className="" >
                         <div><LockFilled />{` ${t.asignadoA.GivenName} ${t.asignadoA.Surname}`} </div>
                       </Tag>}
-                    
+
                     </div>
                     <div className=" text-lg font-bold mt-2 text-black-700">{t.razonSocial}</div>
                     <div className=" text-xs mb-4  text-muted-700">Inicio del trámite: {moment(t.createdAt).format('DD/MM/YYYY HH:mm')}<br />
-                    <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm'):  moment(t.createdAt).format('DD/MM/YYYY HH:mm') }</div><br />
-                    <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
-                  <br/>
-                   
-                  CUIT: {t.cuit}<br />
-                  Exp: {'A Definir'}</div>
+                      <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm') : moment(t.createdAt).format('DD/MM/YYYY HH:mm')}</div><br />
+                      <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
+                      <br />
+
+                      CUIT: {t.cuit}<br />
+                      Exp: {'A Definir'}</div>
                   </div>
                 </div>
 
@@ -250,16 +250,16 @@ export default () => {
               </div>
             ))}
           </TabPane>
-       
-          <TabPane tab={`Mis Asignados (${tramites.filter((t: TramiteAlta) =>  t.categoria === 'PRE INSCRIPTO' && t.status !== 'BORRADOR'  && t.asignadoA && t.asignadoA.cuit === usuario.cuit
-            || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR'   && t.asignadoA && t.asignadoA.cuit === usuario.cuit).length})`} key="3">
-            {tramites.filter((t: TramiteAlta) => 
-            t.categoria === 'PRE INSCRIPTO' && t.status !== 'BORRADOR' 
-            || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR'  
-           ).filter((t: TramiteAlta) => t.asignadoA && t.asignadoA.cuit === usuario.cuit).map((t: TramiteAlta) => (
-             
-             <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
-     
+
+          <TabPane tab={`Mis Asignados (${tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' && t.status !== 'BORRADOR' && t.asignadoA && t.asignadoA.cuit === usuario.cuit
+            || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR' && t.asignadoA && t.asignadoA.cuit === usuario.cuit).length})`} key="3">
+            {tramites.filter((t: TramiteAlta) =>
+              t.categoria === 'PRE INSCRIPTO' && t.status !== 'BORRADOR'
+              || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR'
+            ).filter((t: TramiteAlta) => t.asignadoA && t.asignadoA.cuit === usuario.cuit).map((t: TramiteAlta) => (
+
+              <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
+
                 <div className="flex justify-between">
                   <div className="">
                     <div className="flex">
@@ -270,17 +270,17 @@ export default () => {
                       </Tag> : <Tag color="red" className="" >
                         <div><LockFilled />{` ${t.asignadoA.GivenName} ${t.asignadoA.Surname}`} </div>
                       </Tag>}
-                     
+
                     </div>
                     <div className=" text-lg font-bold mt-2 text-black-700">{t.razonSocial}</div>
                     <div className=" text-xs mb-4  text-muted-700">Inicio del trámite: {moment(t.createdAt).format('DD/MM/YYYY HH:mm')}<br />
-                    <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm'):  moment(t.createdAt).format('DD/MM/YYYY HH:mm') }</div>
-                    <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
-                   <br/>
-                 CUIT: {t.cuit}<br />
-                  Exp: {'A Definir'}</div>
+                      <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm') : moment(t.createdAt).format('DD/MM/YYYY HH:mm')}</div>
+                      <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
+                      <br />
+                      CUIT: {t.cuit}<br />
+                      Exp: {'A Definir'}</div>
                   </div>
                 </div>
 
@@ -296,7 +296,7 @@ export default () => {
                   </div>
                   <div className="text-right mt-4">
                     <Button type="primary" onClick={async () => {
-                      console.log(getTramiteByID(t._id))
+                      //console.log(getTramiteByID(t._id))
                       const tramiteATrabajar = await getTramiteByID(t._id)
                       await dispatch(setTramiteView(tramiteATrabajar))
                       await dispatch(cargarUltimaRevisionAbierta(tramiteATrabajar))
@@ -313,31 +313,31 @@ export default () => {
 
           </TabPane>
 
-          <TabPane tab={`A Supervisar (${tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO'  ).filter((t: TramiteAlta) => t.status === 'A SUPERVISAR' ||  t.status === 'SUBSANADO A SUPERVISAR').length})`} key="4">
-  {tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR').filter((t: TramiteAlta) => t.status === 'A SUPERVISAR' || t.status === 'SUBSANADO A SUPERVISAR').map((t: TramiteAlta) => (
-             <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
+          <TabPane tab={`A Supervisar (${tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO').filter((t: TramiteAlta) => t.status === 'A SUPERVISAR' || t.status === 'SUBSANADO A SUPERVISAR').length})`} key="4">
+            {tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR').filter((t: TramiteAlta) => t.status === 'A SUPERVISAR' || t.status === 'SUBSANADO A SUPERVISAR').map((t: TramiteAlta) => (
+              <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
                 <div className="flex justify-between">
                   <div>
                     <div className="flex">
-                    <div className="mr-2"><Tag >{t.categoria}</Tag></div>
+                      <div className="mr-2"><Tag >{t.categoria}</Tag></div>
                       <div className="mr-2"><Tag color={getObservacionesTecnicoRaw(getReviewAbierta(t)) ? "orange" : "green"}>{t.status}</Tag></div>
                       {!t.asignadoA ? <Tag color="green" className="" >
                         <div><UnlockFilled /> Sin asignar </div>
                       </Tag> : <Tag color="red" className="" >
                         <div><LockFilled />{` ${t.asignadoA.GivenName} ${t.asignadoA.Surname}`} </div>
                       </Tag>}
-                     
+
                     </div>
                     <div className=" text-lg font-bold mt-2 text-black-700">{t.razonSocial}</div>
                     <div className=" text-xs mb-4  text-muted-700">Inicio del trámite: {moment(t.createdAt).format('DD/MM/YYYY HH:mm')}<br />
-                    <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm'):  moment(t.createdAt).format('DD/MM/YYYY HH:mm') }</div>
-                    <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
-                   
-                    <br />
-                 CUIT: {t.cuit}<br />
-                  Exp: {'A Definir'}</div>
+                      <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm') : moment(t.createdAt).format('DD/MM/YYYY HH:mm')}</div>
+                      <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado ? numeral(t.cantidadSubsanado).format('0') : numeral(t.cantidadSubsanado).format('0')} </div>
+
+                      <br />
+                      CUIT: {t.cuit}<br />
+                      Exp: {'A Definir'}</div>
                   </div>
                 </div>
 
@@ -354,7 +354,7 @@ export default () => {
                   <div className="text-right mt-4">
                     <Button type="primary" onClick={async () => {
                       const tramiteATrabajar = await getTramiteByID(t._id)
-                      
+
                       await dispatch(setTramiteView(tramiteATrabajar))
                       await dispatch(cargarUltimaRevisionAbierta(tramiteATrabajar))
                       router.push('/informacion_basica')
@@ -369,31 +369,31 @@ export default () => {
             ))}
           </TabPane>
           <TabPane tab={`Pendientes de Aprobación (${tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' || t.categoria === 'DESACTUALIZADO').filter((t: TramiteAlta) => t.status === 'PENDIENTE DE APROBACION').length})`} key="5">
-            {tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' && t.status !== 'BORRADOR' || t.categoria === 'DESACTUALIZADO'   && t.status !== 'BORRADOR').filter((t: TramiteAlta) => t.status === 'PENDIENTE DE APROBACION').map((t: TramiteAlta) => (
-    <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
+            {tramites.filter((t: TramiteAlta) => t.categoria === 'PRE INSCRIPTO' && t.status !== 'BORRADOR' || t.categoria === 'DESACTUALIZADO' && t.status !== 'BORRADOR').filter((t: TramiteAlta) => t.status === 'PENDIENTE DE APROBACION').map((t: TramiteAlta) => (
+              <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
                 <div className="flex justify-between">
                   <div>
                     <div className="flex">
-                    <div className="mr-2"><Tag >{t.categoria}</Tag></div>
+                      <div className="mr-2"><Tag >{t.categoria}</Tag></div>
                       <div className="mr-2"><Tag color={getObservacionesTecnicoRaw(getReviewAbierta(t)) ? "orange" : "green"}>{t.status}</Tag></div>
                       {!t.asignadoA ? <Tag color="green" className="" >
                         <div><UnlockFilled /> Sin asignar </div>
                       </Tag> : <Tag color="red" className="" >
                         <div><LockFilled />{` ${t.asignadoA.GivenName} ${t.asignadoA.Surname}`} </div>
                       </Tag>}
-                     
+
                     </div>
                     <div className=" text-lg font-bold mt-2 text-black-700">{t.razonSocial}</div>
                     <div className=" text-xs mb-4  text-muted-700">Inicio del trámite: {moment(t.createdAt).format('DD/MM/YYYY HH:mm')}<br />
-                    <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm'):  moment(t.createdAt).format('DD/MM/YYYY HH:mm') }</div>
-                    <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado} </div>
-                   
-                    <br />
-               
-                  CUIT: {t.cuit}<br />
-                  Exp: {'A Definir'}</div>
+                      <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm') : moment(t.createdAt).format('DD/MM/YYYY HH:mm')}</div>
+                      <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado} </div>
+
+                      <br />
+
+                      CUIT: {t.cuit}<br />
+                      Exp: {'A Definir'}</div>
                   </div>
                 </div>
 
@@ -425,33 +425,33 @@ export default () => {
           </TabPane>
 
           <TabPane tab={`Bandeja de trabajo  (${tramites.filter((ft: TramiteAlta) => ft.asignadoA === null).length})`} key="6">
-            {tramites.filter((ft: TramiteAlta) =>  ft.asignadoA === null && ft.status !== 'BORRADOR').map((t: TramiteAlta) => (
-             
-             <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
-          <div className="flex justify-between">
-              
+            {tramites.filter((ft: TramiteAlta) => ft.asignadoA === null && ft.status !== 'BORRADOR').map((t: TramiteAlta) => (
+
+              <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
+                <div className="flex justify-between">
+
                   <div>
                     <div className="flex">
-                    <div className="mr-2"><Tag >{t.categoria}</Tag></div>
+                      <div className="mr-2"><Tag >{t.categoria}</Tag></div>
                       <div className="mr-2"><Tag color={getObservacionesTecnicoRaw(getReviewAbierta(t)) ? "orange" : "green"}>{t.status}</Tag></div>
                       {!t.asignadoA ? <Tag color="green" className="" >
                         <div><UnlockFilled /> Sin asignar </div>
                       </Tag> : <Tag color="red" className="" >
                         <div><LockFilled />{` ${t.asignadoA.GivenName} ${t.asignadoA.Surname}`} </div>
                       </Tag>}
-                    
+
                     </div>
                     <div className=" text-lg font-bold mt-2 text-black-700">{t.razonSocial}</div>
                     <div className=" text-xs mb-4  text-muted-700">Inicio del trámite: {moment(t.createdAt).format('DD/MM/YYYY HH:mm')}<br />
-                    <div className=" text-xs text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm'): 'NO INFORMA'}</div><br />
-                    <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm'):  moment(t.createdAt).format('DD/MM/YYYY HH:mm') }</div>
-                    <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
-                    <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado} </div>
-                   <br />
-               
-                  CUIT: {t.cuit}<br />
-                  Exp: {'A Definir'}</div>
+                      <div className=" text-xs text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm') : 'NO INFORMA'}</div><br />
+                      <div className=" text-xs   text-muted-700">Envio del trámite: {t.submitedAt ? moment(t.submitedAt).format('DD/MM/YYYY HH:mm') : moment(t.createdAt).format('DD/MM/YYYY HH:mm')}</div>
+                      <div className=" text-xs   text-muted-700">ID de tramite:{t._id} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces OBSERVADO:{t.cantidadObservado ? numeral(t.cantidadObservado).format('0') : numeral(t.cantidadObservado).format('0')} </div>
+                      <div className=" text-xs   text-muted-700">Cantidad de veces SUBSANADO:{t.cantidadSubsanado} </div>
+                      <br />
+
+                      CUIT: {t.cuit}<br />
+                      Exp: {'A Definir'}</div>
                   </div>
                 </div>
 
@@ -483,8 +483,8 @@ export default () => {
 
 
           </TabPane>
-        
-       {/* <TabPane tab="Borradores *" key="7">
+
+          {/* <TabPane tab="Borradores *" key="7">
             {tramites.filter((t: TramiteAlta) => t.status === 'BORRADOR').map((t: TramiteAlta) => (
               <div className="rounded-lg bg-muted-100 px-4 py-4 pb-4 mb-4">
                 <div className="flex justify-between">

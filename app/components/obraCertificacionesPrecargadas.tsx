@@ -203,7 +203,7 @@ export const CertificacionesPrecargadas: React.FC<CertificacionesPrecargadasProp
 
     if (periodoSeleccionado)
       periodosCopy = obra.certificaciones.filter(v => v.codigo !== periodoSeleccionado.codigo)
-      console.log(periodosCopy)
+      // console.log(periodosCopy); // ## Comentado
       periodosCopy.push({
         codigo: periodoSeleccionado ? periodoSeleccionado.codigo : getUniqCode(),
         periodo,
@@ -213,7 +213,7 @@ export const CertificacionesPrecargadas: React.FC<CertificacionesPrecargadasProp
         observacionRegistro:motivoRechazo
       })
 
-      console.log(periodosCopy)
+      //console.log(periodosCopy); // ## Comentado
 
     setPeriodo(null)
     setMonto(0)

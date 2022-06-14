@@ -13,17 +13,10 @@ handler.post(async (req: any, res: NextApiResponse) => {
     return res.status(401).send('unauthenticated');
   }
   
-  // const { tramite } = req.body;
-
-  //TODO: if (_id is not null) ..... update
-
-
-  
+   
   if (!req.body) return res.status(400).send('You must write something');
  
-  if(req.body._id) {
-    // get by id
-    console.log(req.body._id)
+  if(req.body._id) {    
 
     await req.db
     .collection('tramites')
@@ -40,9 +33,9 @@ handler.post(async (req: any, res: NextApiResponse) => {
       createdAt: new Date(),
       creatorId: req.user,
     };
-    console.log(newTramite._id)
+    //console.log(newTramite._id)
     const result = await req.db.collection('tramites').insertOne(newTramite);
-    console.log(newTramite._id)
+    //console.log(newTramite._id)
     return res.send(newTramite);  
   }
 });

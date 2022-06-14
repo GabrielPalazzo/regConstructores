@@ -13,7 +13,7 @@ import { ObrasDatosGenerales } from './obraDatosGenerales'
 import _ from 'lodash'
 import moment from 'moment'
 
-const onSearch = value => console.log(value);
+// const onSearch = value => console.log(value); // ## Comentado
 const { Search } = Input;
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -21,7 +21,7 @@ const { TabPane } = Tabs;
 const format = "DD/MM/YYYY HH:mm"
 
 function callback(key) {
-  console.log(key);
+  // console.log(key); // ## Comentado
 }
 
 export interface BandejaConstructorProps {

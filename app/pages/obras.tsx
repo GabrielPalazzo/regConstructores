@@ -42,12 +42,12 @@ const { Step } = Steps;
 const { Option } = Select;
 
 function confirm(e) {
-  console.log(e);
+  //console.log(e);
   message.success('Se elimino correctamente');
 }
 
 function cancel(e) {
-  console.log(e);
+  //console.log(e);
   message.error('Ha cancelado la operacion');
 }
 
@@ -127,7 +127,7 @@ export default () => {
     setIsLoading(false)
   }
   function log(e) {
-    console.log(e);
+    //console.log(e);
   }
 
   const agregarUbicacion = () => {
@@ -141,7 +141,7 @@ export default () => {
 
   function preventDefault(e) {
     e.preventDefault();
-    console.log('Clicked! But prevent default.');
+    //console.log('Clicked! But prevent default.');
   }
 
 
@@ -778,7 +778,7 @@ export default () => {
   const editarObrar = (obra: DDJJObra) => {
 
     setObra(Object.assign({}, tramite.ddjjObras.filter((o: DDJJObra) => o.id === obra.id)[0]))
-    console.log(Object.assign({}, tramite.ddjjObras.filter((o: DDJJObra) => o.id === obra.id)[0]))
+    //console.log(Object.assign({}, tramite.ddjjObras.filter((o: DDJJObra) => o.id === obra.id)[0]))
     setModalObras(true)
   }
 
@@ -906,7 +906,7 @@ export default () => {
         editarObrar(Object.assign({}, record))
       }} className="cursor-pointer"><EditOutlined /></div> : <div onClick={() => {
         setModo(MODO.VIEW)
-        console.log(MODO)
+        //console.log(MODO)
         editarObrar(Object.assign({}, record))
       }} className="cursor-pointer"><CloudDownloadOutlined /></div>),
     

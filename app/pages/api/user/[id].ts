@@ -11,7 +11,7 @@ handler.get(async (req: any, res: NextApiResponse) => {
     query: { id },
   } = req
 
-  console.log('ingreso a la funcion')
+  // console.log('ingreso a la funcion')
   // Pagination: Fetch posts from before the input date or fetch from newest
   //const creatorId = req.query.by;
   const user = await req.db

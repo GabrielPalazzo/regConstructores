@@ -8,7 +8,7 @@ import { RootState } from '../redux/store';
 const { Option, OptGroup } = Select;
 
 function handleChange(value) {
-  console.log(`selected ${value}`);
+  // console.log(`selected ${value}`); // ## Comentado
 }
 
 
