@@ -14,7 +14,7 @@ const endpoint = async (req, res) => {
 
     form.parse(req, async (err, fields, files) => {
       if (err)
-        cconsole.log('#### Endpoint Error file new ' + err);
+        console.log('#### Endpoint Error file new ' + err);
 
       const client = ipfsClient({
         host: process.env.IPFS_NODE_HOST,
