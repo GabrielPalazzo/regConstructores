@@ -17,7 +17,7 @@ handler.get(async (req: any, res: NextApiResponse) => {
     res.status(401).send('Forbidden')
 
   let tramites = null;
-  const esJefeFegistro: Boolean = req.user.Role.filter(function (rol: string) {return rol === 'JEFE REGISTRO' }).length > 0;  
+  const esJefeFegistro: Boolean = req.user.Role.filter(function (rol: string) { return rol === 'JEFE REGISTRO' }).length > 0;
 
   if (esJefeFegistro) {
     tramites = await req.db
@@ -28,10 +28,9 @@ handler.get(async (req: any, res: NextApiResponse) => {
         }).toArray();
   }
   else {
-    // { 'asignadoA': null },
     tramites = await req.db
       .collection('tramites')
-      .find({ "$or": [{ 'asignadoA.cuit': req.user.cuit }] },
+      .find({ "$or": [{ 'asignadoA.cuit': req.user.cuit }, { 'asignadoA': null }] },
         {
           categoria: 1, status: 1, createdAt: 1, _id: 1, razonSocial: 1, cuit: 1, submitedAt: 1, asignadoA: 1, revisiones: 1, cantidadObservado: 1, cantidadSubsanado: 1
         }).toArray();
