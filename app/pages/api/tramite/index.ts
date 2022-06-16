@@ -40,4 +40,15 @@ handler.post(async (req: any, res: NextApiResponse) => {
   }
 });
 
+/**
+ * CONSD-117389 No guarda manitos - No guarda observación
+ * Mensaje error: Failed to load resource: the server responded with a status of 413 (Body exceeded 1mb limit)
+  */
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+  },
+}
 export default handler;
