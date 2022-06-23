@@ -110,3 +110,6 @@ dist
 .tern-port
 
 .vercel
+/run.sh
+/package-lock.json
+/package.json
