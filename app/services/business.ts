@@ -35,7 +35,7 @@ export const getTramitesParaVerificar = (): Promise<Array<TramiteAlta>> => {
   })
 }
 
-export const getTramites = (): Promise<Array<TramiteAlta>> => {  
+export const getTramites = (): Promise<Array<TramiteAlta>> => {
   return axios.get('/api/tramites', {
     headers: {
       Authorization: 'Bearer ' + getToken()
@@ -327,7 +327,8 @@ export const getEmptyObras = (): DDJJObra => {
 export const getColorStatus = (tramite: TramiteAlta) => {
   if (!tramite) return 'gray'
 
-  switch (tramite.status) {
+  switch (tramite.status)
+  {
     case 'BORRADOR':
       return 'purple'
     case 'VERIFICADO':
@@ -347,7 +348,8 @@ export const getUsuario = () => {
   let user: any = null
   const token = localStorage.getItem('token')
 
-  if (token) {
+  if (token)
+  {
     jwt.verify(token, process.env.SESSION_SECRET as string, (err, decode) => {
       if (err) return null
       user = decode
@@ -427,39 +429,45 @@ const aprobarTramite = async (tramite: TramiteAlta): Promise<CertificadoCapacida
 export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> => {
 
 
-  if ((tramite.categoria === 'PRE INSCRIPTO' || tramite.categoria === 'DESACTUALIZADO') && (getUsuario().isConstructor())) {
+  if ((tramite.categoria === 'PRE INSCRIPTO' || tramite.categoria === 'DESACTUALIZADO') && (getUsuario().isConstructor()))
+  {
     tramite.creatorId = getUsuario().userData()
   }
 
-  if (tramite.status === 'BORRADOR') {
+  if (tramite.status === 'BORRADOR')
+  {
     tramite.status = "PENDIENTE DE REVISION"
     return saveTramiteService(tramite)
   }
 
-  /*** 
-   * Verifica que se genere el certificado. Debo justificar mas claro este metodo.
-  */
-  if (getUsuario().isAprobador()) {
-    if (getReviewAbierta(tramite)) {
+  /** En esta condición se genera el certificado. Se debe detallar más este método. */
+  if (getUsuario().isAprobador()) 
+  {
+    if (getReviewAbierta(tramite))
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       return saveTramiteService(tramite)
-    } else {
+    } else
+    {
       const certificado = await aprobarTramite(tramite)
       return certificado.tramite
     }
   }
 
 
-  if (tramite.status === 'PENDIENTE DE REVISION' && getUsuario().isBackOffice()) {
-    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if (tramite.status === 'PENDIENTE DE REVISION' && getUsuario().isBackOffice())
+  {
+    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else {
+    } else
+    {
       tramite.status = 'A SUPERVISAR'
       tramite.asignadoA = null
 
@@ -468,15 +476,18 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
 
   }
 
-  if (tramite.status === 'EN REVISION' && getUsuario().isBackOffice()) {
-    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if (tramite.status === 'EN REVISION' && getUsuario().isBackOffice())
+  {
+    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else {
+    } else
+    {
       tramite.status = 'A SUPERVISAR'
       tramite.asignadoA = null
     }
@@ -485,22 +496,26 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
   }
 
 
-  if (tramite.status === 'OBSERVADO' && getUsuario().isConstructor()) {
+  if (tramite.status === 'OBSERVADO' && getUsuario().isConstructor())
+  {
     tramite.status = 'SUBSANADO'
     tramite.cantidadSubsanado = tramite && tramite.cantidadSubsanado ? tramite.cantidadSubsanado + 1 : 1
     tramite.asignadoA = tramite.supervision && tramite.supervision.supervisadoPor ? tramite.supervision.supervisadoPor : tramite.userBackoffice && tramite.userBackoffice.userPor
     return saveTramiteService(tramite)
   }
 
-  if ((tramite.status === 'SUBSANADO') && (getUsuario().isBackOffice())) {
-    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if ((tramite.status === 'SUBSANADO') && (getUsuario().isBackOffice()))
+  {
+    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else {
+    } else
+    {
       tramite.status = 'SUBSANADO A SUPERVISAR'
       tramite.asignadoA = null
 
@@ -511,15 +526,18 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
   }
 
 
-  if ((tramite.status === 'SUBSANADO EN REVISION') && (getUsuario().isBackOffice())) {
+  if ((tramite.status === 'SUBSANADO EN REVISION') && (getUsuario().isBackOffice()))
+  {
     tramite.status = 'SUBSANADO A SUPERVISAR'
     tramite.asignadoA = null
     return saveTramiteService(tramite)
   }
 
 
-  if (tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isSupervisor() || tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isAprobador()) {
-    if (getReviewAbierta(tramite) && getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if (tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isSupervisor() || tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isAprobador())
+  {
+    if (getReviewAbierta(tramite) && getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
 
@@ -527,7 +545,8 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
         supervisadoPor: getUsuario().userData(),
         supervisadoAt: new Date().getTime()
       }
-    } else {
+    } else
+    {
       tramite.status = 'PENDIENTE DE APROBACION'
       //tramite.revisiones=[]
     }
@@ -540,8 +559,10 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
   }
 
 
-  if (tramite.status === 'SUBSANADO EN REVISION' && getUsuario().isSupervisor()) {
-    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if (tramite.status === 'SUBSANADO EN REVISION' && getUsuario().isSupervisor())
+  {
+    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
 
@@ -549,7 +570,8 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else {
+    } else
+    {
       tramite.status = 'PENDIENTE DE APROBACION'
       //tramite.revisiones=[]
     }
@@ -563,8 +585,10 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
 
 
 
-  if (tramite.status === 'A SUPERVISAR' && getUsuario().isSupervisor()) {
-    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if (tramite.status === 'A SUPERVISAR' && getUsuario().isSupervisor())
+  {
+    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
 
@@ -572,7 +596,8 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
         supervisadoPor: getUsuario().userData(),
         supervisadoAt: new Date().getTime()
       }
-    } else {
+    } else
+    {
       tramite.status = 'PENDIENTE DE APROBACION'
       //tramite.revisiones=[]
     }
@@ -584,13 +609,16 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
     return saveTramiteService(tramite)
   }
 
-  if (tramite.status === 'PENDIENTE DE APROBACION') {
-    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if (tramite.status === 'PENDIENTE DE APROBACION')
+  {
+    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
 
       tramite.asignadoA = null
-    } else {
+    } else
+    {
       tramite.categoria = 'INSCRIPTO'
       tramite.status = 'VERIFICADO'
       //tramite.revisiones=[]
@@ -600,8 +628,10 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
 
 
 
-  if (tramite.status === 'EN REVISION') {
-    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0) {
+  if (tramite.status === 'EN REVISION')
+  {
+    if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
+    {
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
 
@@ -609,7 +639,8 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else {
+    } else
+    {
       tramite.categoria = 'INSCRIPTO'
       tramite.status = 'VERIFICADO'
       //tramite.revisiones=[]
