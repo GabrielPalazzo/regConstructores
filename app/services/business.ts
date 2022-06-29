@@ -417,27 +417,33 @@ export const isTramiteEditable = (tramite: TramiteAlta): boolean => {
 
 const aprobarTramite = async (tramite: TramiteAlta): Promise<CertificadoCapacidad> => {
 
-  return axios.post('/api/tramite/aprobar', tramite, {
-    headers: {
-      Authorization: 'Bearer ' + getToken()
-    }
-  }).then((certificado) => {
-    return certificado.data
-  })
+  return axios.post('/api/tramite/aprobar', tramite,
+    {
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      }
+    }).then((certificado) => {
+      return certificado.data
+    })
 }
 
+/**
+ * Enviar trámite
+ * @param tramite Trámite que se está analizando
+ * @returns Devuele un objeto TramiteAlta
+ */
 export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> => {
-
 
   if ((tramite.categoria === 'PRE INSCRIPTO' || tramite.categoria === 'DESACTUALIZADO') && (getUsuario().isConstructor()))
   {
-    tramite.creatorId = getUsuario().userData()
+    tramite.creatorId = getUsuario().userData();
   }
-
+  /**  Verifico el tramite que esta en BORRADOR */
   if (tramite.status === 'BORRADOR')
   {
-    tramite.status = "PENDIENTE DE REVISION"
-    return saveTramiteService(tramite)
+    console.log('#### Entrada en sendTramite linea 444');
+    tramite.status = "PENDIENTE DE REVISION";
+    return saveTramiteService(tramite);
   }
 
   /** En esta condición se genera el certificado. Se debe detallar más este método. */
@@ -445,41 +451,47 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
   {
     if (getReviewAbierta(tramite))
     {
-      tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-      return saveTramiteService(tramite)
-    } else
+      console.log('#### Tengo ReviewAbierta linea 454: Verificar getReviewAbierta');
+      tramite.status = 'OBSERVADO';
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1;
+      return saveTramiteService(tramite);
+    }
+    else
     {
+      console.log('#### Entrada en sendTramite linea 461: aprobarTramite');
       const certificado = await aprobarTramite(tramite)
       return certificado.tramite
     }
   }
 
-
+  /**  Verifico el tramite que esta en PENDIENTE DE REVISION como usuario de BackOffice, y si todo esta bien, lo paso al estado 'A SUPERVISAR' */
   if (tramite.status === 'PENDIENTE DE REVISION' && getUsuario().isBackOffice())
   {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
-      tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
+      console.log('#### Tengo ReviewAbierta  linea 472: PENDIENTE DE REVISION && isBackOffice');
+      tramite.status = 'OBSERVADO';
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1;
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else
-    {
-      tramite.status = 'A SUPERVISAR'
-      tramite.asignadoA = null
-
     }
-    return saveTramiteService(tramite)
-
+    else
+    {
+      console.log('#### Entrada en sendTramite linea 482: A SUPERVISAR && asignadoA para a Null');
+      tramite.status = 'A SUPERVISAR';
+      tramite.asignadoA = null;
+    }
+    return saveTramiteService(tramite);
   }
 
+  /**  Verifico el tramite que esta EN REVISION como usuario de BackOffice, y si todo esta bien, lo paso al estado 'A SUPERVISAR' */
   if (tramite.status === 'EN REVISION' && getUsuario().isBackOffice())
   {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
+      console.log('#### Tengo ReviewAbierta linea 494: EN REVISION && isBackOffice');
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
@@ -488,27 +500,32 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
       }
     } else
     {
-      tramite.status = 'A SUPERVISAR'
-      tramite.asignadoA = null
+      console.log('#### Entrada en sendTramite linea 503: A SUPERVISAR && asignadoA para a Null');
+      tramite.status = 'A SUPERVISAR';
+      tramite.asignadoA = null;
     }
-
     return saveTramiteService(tramite)
   }
 
-
+  /**  Verifico el tramite que esta EN OBSERVADO como usuario EMPRESA. Y ademas asigno el tramite a un operador (asignadoA) */
   if (tramite.status === 'OBSERVADO' && getUsuario().isConstructor())
   {
-    tramite.status = 'SUBSANADO'
+    console.log('#### Entrada en sendTramite linea 513: OBSERVADO && usuario EMPRESA');
+    tramite.status = 'SUBSANADO';
     tramite.cantidadSubsanado = tramite && tramite.cantidadSubsanado ? tramite.cantidadSubsanado + 1 : 1
-    tramite.asignadoA = tramite.supervision && tramite.supervision.supervisadoPor ? tramite.supervision.supervisadoPor : tramite.userBackoffice && tramite.userBackoffice.userPor
+    tramite.asignadoA = tramite.supervision && tramite.supervision.supervisadoPor
+      ? tramite.supervision.supervisadoPor : tramite.userBackoffice && tramite.userBackoffice.userPor;
+    console.log('#### Linea 518 tramite.asignadoA:', tramite.asignadoA);
     return saveTramiteService(tramite)
   }
 
+  /**  Verifico el tramite que esta EN SUBSANADO como usuario de BackOffice, y si todo esta sin revisiones lo paso al estado 'SUBSANADO A SUPERVISAR' */
   if ((tramite.status === 'SUBSANADO') && (getUsuario().isBackOffice()))
   {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
-      tramite.status = 'OBSERVADO'
+      console.log('#### Tengo ReviewAbierta linea 527: SUBSANADO && usuario BackOffice');
+      tramite.status = 'OBSERVADO';
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
@@ -516,142 +533,148 @@ export const sendTramite = async (tramite: TramiteAlta): Promise<TramiteAlta> =>
       }
     } else
     {
-      tramite.status = 'SUBSANADO A SUPERVISAR'
-      tramite.asignadoA = null
-
+      console.log('#### Cambio de estado linea 536: SUBSANADO A SUPERVISAR && asignadoA para a Null');
+      tramite.status = 'SUBSANADO A SUPERVISAR';
+      tramite.asignadoA = null;
     }
     return saveTramiteService(tramite)
-
-
   }
 
-
+  /**  Verifico el tramite que esta en SUBSANADO EN REVISION como usuario de BackOffice */
   if ((tramite.status === 'SUBSANADO EN REVISION') && (getUsuario().isBackOffice()))
   {
-    tramite.status = 'SUBSANADO A SUPERVISAR'
-    tramite.asignadoA = null
-    return saveTramiteService(tramite)
+    console.log('#### Cambio de estado linea 546: SUBSANADO A SUPERVISAR && asignadoA para a Null');
+    tramite.status = 'SUBSANADO A SUPERVISAR';
+    tramite.asignadoA = null;
+    return saveTramiteService(tramite);
   }
 
-
+  /**  Verifico el tramite que esta en SUBSANADO A SUPERVISAR y el usuario debe ser Supervisor o Aprobador */
   if (tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isSupervisor() || tramite.status === 'SUBSANADO A SUPERVISAR' && getUsuario().isAprobador())
   {
     if (getReviewAbierta(tramite) && getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
+      console.log('#### Tengo ReviewAbierta linea 557: Paso al estado OBSERVADO');
       tramite.status = 'OBSERVADO'
       tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-
       tramite.supervision = {
         supervisadoPor: getUsuario().userData(),
         supervisadoAt: new Date().getTime()
       }
-    } else
+    }
+    else
     {
-      tramite.status = 'PENDIENTE DE APROBACION'
+      console.log('#### NO Tengo ReviewAbierta linea 567: Paso al estado PENDIENTE DE APROBACION');
+      tramite.status = 'PENDIENTE DE APROBACION';
       //tramite.revisiones=[]
     }
-    tramite.asignadoA = null
+    tramite.asignadoA = null;
     tramite.supervision = {
       supervisadoPor: getUsuario().userData(),
       supervisadoAt: new Date().getTime()
-    }
-    return saveTramiteService(tramite)
+    };
+    console.log('#### Se guarda en linea 576: tramite.supervision y tramite.asignadoA en null');
+    return saveTramiteService(tramite);
   }
 
-
+  /**  Verifico el tramite que esta en SUBSANADO EN REVISION y el usuario debe ser Supervisor */
   if (tramite.status === 'SUBSANADO EN REVISION' && getUsuario().isSupervisor())
   {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
+      console.log('#### Tengo ReviewAbierta linea 585: Paso al estado OBSERVADO');
       tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1;
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else
+    }
+    else
     {
+      console.log('#### NO Tengo ReviewAbierta linea 595: Paso al estado PENDIENTE DE APROBACION');
       tramite.status = 'PENDIENTE DE APROBACION'
       //tramite.revisiones=[]
     }
-    tramite.asignadoA = null
+    tramite.asignadoA = null;
     tramite.supervision = {
       supervisadoPor: getUsuario().userData(),
       supervisadoAt: new Date().getTime()
-    }
-    return saveTramiteService(tramite)
+    };
+    console.log('#### Se guarda en linea 604: tramite.supervision y tramite.asignadoA en null');
+    return saveTramiteService(tramite);
   }
 
-
-
+  /**  Verifico el tramite que esta en A SUPERVISAR y el usuario debe ser Supervisor */
   if (tramite.status === 'A SUPERVISAR' && getUsuario().isSupervisor())
   {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
-      tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-
+      console.log('#### Tengo ReviewAbierta linea 613: Paso al estado OBSERVADO');
+      tramite.status = 'OBSERVADO';
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1;
       tramite.supervision = {
         supervisadoPor: getUsuario().userData(),
         supervisadoAt: new Date().getTime()
       }
-    } else
+    }
+    else
     {
-      tramite.status = 'PENDIENTE DE APROBACION'
+      console.log('#### NO Tengo ReviewAbierta linea 623: Paso al estado PENDIENTE DE APROBACION');
+      tramite.status = 'PENDIENTE DE APROBACION';
       //tramite.revisiones=[]
     }
-    tramite.asignadoA = null
+    tramite.asignadoA = null;
     tramite.supervision = {
       supervisadoPor: getUsuario().userData(),
       supervisadoAt: new Date().getTime()
     }
-    return saveTramiteService(tramite)
+    console.log('#### Se guarda en linea 632: tramite.supervision y tramite.asignadoA en null');
+    return saveTramiteService(tramite);
   }
 
+  /**  Verifico el tramite que esta en PENDIENTE DE APROBACION */
   if (tramite.status === 'PENDIENTE DE APROBACION')
   {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
-      tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-
-      tramite.asignadoA = null
-    } else
+      console.log('#### Tengo ReviewAbierta linea 641: Paso al estado OBSERVADO');
+      tramite.status = 'OBSERVADO';
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1;
+      tramite.asignadoA = null; // ¿Esta bien que asignadoA pase con el valor NULL?
+    }
+    else
     {
-      tramite.categoria = 'INSCRIPTO'
-      tramite.status = 'VERIFICADO'
+      console.log('#### NO Tengo ReviewAbierta linea 648: Paso al estado VERIFICADO y la categoria INSCRIPTO');
+      tramite.categoria = 'INSCRIPTO';
+      tramite.status = 'VERIFICADO';
       //tramite.revisiones=[]
     }
     return saveTramiteService(tramite)
   }
 
-
-
+  /**  Verifico el tramite que esta en EN REVISION */
   if (tramite.status === 'EN REVISION')
   {
     if (getReviewAbierta(tramite).reviews.filter(r => !r.isOk).length > 0)
     {
-      tramite.status = 'OBSERVADO'
-      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1
-
+      console.log('#### Tengo ReviewAbierta linea 661: Paso al estado OBSERVADO');
+      tramite.status = 'OBSERVADO';
+      tramite.cantidadObservado = tramite.cantidadObservado && tramite.cantidadObservado ? tramite.cantidadObservado + 1 : 1;
       tramite.userBackoffice = {
         userPor: getUsuario().userData(),
         userDate: new Date().getTime()
       }
-    } else
+    }
+    else
     {
-      tramite.categoria = 'INSCRIPTO'
-      tramite.status = 'VERIFICADO'
+      console.log('#### NO Tengo ReviewAbierta linea 671: Paso al estado VERIFICADO y la categoria INSCRIPTO');
+      tramite.categoria = 'INSCRIPTO';
+      tramite.status = 'VERIFICADO';
       //tramite.revisiones=[]
     }
     return saveTramiteService(tramite)
   }
-
-
-
-
-
 }
 
 export const getObservacionesTecnicoRaw = (revisionTramite: RevisionTramite): string => {
