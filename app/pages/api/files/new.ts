@@ -1,10 +1,19 @@
 import ipfsClient from 'ipfs-http-client'
 import multiparty from 'multiparty'
 import fs from 'fs'
+import { Agent } from 'http';
 
 
 const endpoint = async (req, res) => {
-  try {
+  try
+  {
+    const  ipfsAgent = new Agent({
+      keepAlive: true,
+      keepAliveMsecs: 1000,
+      maxSockets: 256,
+      maxFreeSockets: 256
+    });
+
     let form = new multiparty.Form();
     const result: Array<{
       fileName: string
@@ -20,10 +29,12 @@ const endpoint = async (req, res) => {
         host: process.env.IPFS_NODE_HOST,
         protocol: process.env.IPFS_NODE_PROTOCOL,
         port: parseInt(process.env.IPFS_NODE_PORT, 10),
-        apiPath: process.env.IPFS_NODE_APIPATH
+        apiPath: process.env.IPFS_NODE_APIPATH,
+        agent: ipfsAgent
       })
 
-      for (let i = 0; i <= files.file.length - 1; i++) {
+      for (let i = 0; i <= files.file.length - 1; i++)
+      {
         const f = files.file[i]
         const binary = fs.readFileSync(f.path)
         const { cid } = await client.add(binary)
@@ -37,7 +48,8 @@ const endpoint = async (req, res) => {
     });
 
   }
-  catch (error) {
+  catch (error)
+  {
     console.log('#### Catch Error file new ' + error);
     res.status(500).send(error)
   }
